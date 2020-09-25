@@ -215,7 +215,7 @@ $rowListar = $obj->listarItens($idpedido);
                                                     <div class="form-group">
                                                         <br>
                                                         <!-- <a href="form_pagamento.php?idpedido=<?php echo $idpedido ?>" class="btn btn-danger btn-block">Formas de Pagamento</a><br> -->
-                                                        <button type="submit" class="btn btn-danger btn-block">Formas de Pagamento</a><br>
+                                                        <button type="submit" class="btn btn-danger btn-block">Formas de Pagamento</button><br>
                                                     </div>
                                                 </div>
                                             </div>

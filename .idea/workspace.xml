@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="97632b3e-28a8-44d1-b4d6-efaaf5921722" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/nova_venda.php" beforeDir="false" afterPath="$PROJECT_DIR$/nova_venda.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpServers">
+    <servers>
+      <server host="localhost" id="a6f0146c-3133-4f69-b5de-ee053a01b082" name="localhost" port="8080" />
+    </servers>
+  </component>
+  <component name="ProjectId" id="1i0VNtyZoP4nglXjFEGPvqYGIhp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js.buildTools.grunt.grunt-cli.package" value="" />
+    <property name="js.buildTools.gulp.gulp_package_dir" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs.jest.jest_package" value="" />
+    <property name="nodejs.mocha.mocha_node_package_dir" value="" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php.debug" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" start_url="">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.grunt">
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="97632b3e-28a8-44d1-b4d6-efaaf5921722" name="Default Changelist" comment="" />
+      <created>1601044460320</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1601044460320</updated>
+      <workItem from="1601044461779" duration="1045000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="987" y="163" key="#PHP" timestamp="1601044742429">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="987" y="163" key="#PHP/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601044742429" />
+    <state x="656" y="361" key="#SQL_Dialects" timestamp="1601045000090">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="656" y="361" key="#SQL_Dialects/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045000090" />
+    <state x="956" y="146" key="#Servers" timestamp="1601045275196">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="956" y="146" key="#Servers/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045275196" />
+    <state x="830" y="146" width="1092" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601045507982">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="830" y="146" width="1092" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045507982" />
+    <state width="2517" height="348" key="GridCell.Tab.0.bottom" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.0.bottom/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.0.center" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.0.center/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.0.left" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.0.left/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.0.right" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.0.right/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.1.bottom" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.1.bottom/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.1.center" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.1.center/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.1.left" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.1.left/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.1.right" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.1.right/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.2.bottom" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.2.bottom/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.2.center" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.2.center/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.2.left" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.2.left/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state width="2517" height="348" key="GridCell.Tab.2.right" timestamp="1601045533891">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.2.right/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045533891" />
+    <state x="781" y="165" key="SettingsEditor" timestamp="1601045529088">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="781" y="165" key="SettingsEditor/0.0.2560.1040/2560.0.1366.728@0.0.2560.1040" timestamp="1601045529088" />
+  </component>
+</project>

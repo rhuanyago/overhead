@@ -1,6 +1,6 @@
 <?php
 
-    $segundos = '19287';
+    $segundos = '85983';
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$segundos");
    
