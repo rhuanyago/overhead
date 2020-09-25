@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Session1" value="idexec" />
+	<infoitem key="UD_sessionCount" value="6" />
+	<infoitem key="UD_Session2" value="patrocinador" />
+	<infoitem key="UD_Session3" value="email" />
+	<infoitem key="UD_Session4" value="nome" />
+	<infoitem key="UD_Session5" value="protecao" />
+	<infoitem key="UD_Session6" value="graduacao" />
+</info>

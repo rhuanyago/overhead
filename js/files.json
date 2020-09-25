@@ -1,0 +1,14 @@
+{
+  "files": [{
+    "source": "../assets/javascripts/ui-elements/examples.modals.js",
+    "type": "SCRIPT",
+    "size": 4.096,
+    "stopExecution": false
+  }, {
+    "source": "../assets/javascripts/tables/examples.datatables.tabletools.js",
+    "type": "SCRIPT",
+    "size": 4.096,
+    "stopExecution": true
+  }]
+
+}

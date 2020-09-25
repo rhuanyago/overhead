@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_rsmodulo" value="name:id;datatype:3,name:modulo;datatype:200,name:modulo_espanhol;datatype:200,name:modulo_ingles;datatype:200,name:icone;datatype:200,name:ordem;datatype:3,name:ativo;datatype:200,name:primario;datatype:200,name:idmodulo;datatype:3" />
+</info>
