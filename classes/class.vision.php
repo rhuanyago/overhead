@@ -1046,6 +1046,20 @@ class vision{
 
     }
 
+    public function pegarCategoria(){
+        $c = new conectar();
+        $conexao = $c->conexao();
+
+        $sql = "SELECT * from tbcategorias order by idcategoria";
+        $result3 = $conexao->query($sql);
+        while ($rows_rscat = $result3->fetch_assoc()) { 
+            $option = '<option value="'.$rows_rscat['idcategoria'].'">'.$rows_rscat['idcategoria'].' - '.$rows_rscat['nome'].'</option>';
+            $arr[] = $option;
+        } 
+
+        return $arr;
+    }
+
 
 }
 

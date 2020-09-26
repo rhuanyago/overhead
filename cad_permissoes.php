@@ -178,7 +178,7 @@ require_once "Connections/conexao.php";
                 }else if(r==0){
                     alertify.error("Ja existe essa Permissão!");
                 }else if(r==2){
-                    alertify.error("Nao foi possivel adicionar, Campos em Branco!");
+                    alertify.error("Nao foi possível adicionar, Campos em Branco!");
                 }else{
                     alertify.error("Não foi possível adicionar a Permissão");
                 }

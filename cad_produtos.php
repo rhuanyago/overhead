@@ -1,6 +1,10 @@
 <?php 
 include 'menu_layout.php'; 
 require_once "Connections/conexao.php";
+require_once "classes/class.vision.php";
+$obj = new vision();
+$result = $obj->pegarCategoria();
+//print_r($result);
 
 ?>
 
@@ -67,15 +71,9 @@ require_once "Connections/conexao.php";
                                                 </span>
                                                 <select name="categoria" id="categoria" class="form-control">
                                                     <option value="ND">Selecione a Categoria</option>
-                                                    <?php
-                                                    $c = new conectar();
-                                                    $conexao = $c->conexao();
-
-                                                    $sql = "SELECT * from tbcategorias order by idcategoria";
-                                                    $result3 = $conexao->query($sql);
-                                                    while ($rows_rscat = $result3->fetch_assoc()) { ?>
-                                                        <option value="<?php echo $rows_rscat['idcategoria'] ?>"><?php echo $rows_rscat['idcategoria'] ?> - <?php echo $rows_rscat['nome'] ?></option>
-                                                    <?php } ?>
+                                                    <?php foreach ($result as $key => $value) {
+                                                        echo $value;
+                                                    } ?>
                                                 </select>
                                             </div>
                                         </div>
