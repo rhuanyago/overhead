@@ -3,7 +3,7 @@ include 'menu_layout.php';
 require_once "Connections/conexao.php";
 require_once "classes/class.vision.php";
 $obj = new vision();
-$result = $obj->pegarCategoria();
+$categoria = $obj->pegarCategoria();
 //print_r($result);
 
 ?>
@@ -71,8 +71,8 @@ $result = $obj->pegarCategoria();
                                                 </span>
                                                 <select name="categoria" id="categoria" class="form-control">
                                                     <option value="ND">Selecione a Categoria</option>
-                                                    <?php foreach ($result as $key => $value) {
-                                                        echo $value;
+                                                    <?php foreach ($categoria as $key => $categorias) {
+                                                        echo $categorias;
                                                     } ?>
                                                 </select>
                                             </div>

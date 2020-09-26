@@ -1060,6 +1060,19 @@ class vision{
         return $arr;
     }
 
+    public function pegarPermissao(){
+        $c = new conectar();
+        $conexao=$c->conexao();
+        
+        $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao";
+        $sql = $conexao->query($sql);
+        while ($rows_rsperm = mysqli_fetch_assoc($sql)) { 
+            $option[] = '<option value="'.$rows_rsperm['idpermissao'].'">'.$rows_rsperm['permissao'].'</option>';
+        } 
+
+        return $option;
+    }
+
 
 }
 

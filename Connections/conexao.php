@@ -1,10 +1,9 @@
 <?php
-
 //Conexão com o Banco de Dados
 
 if (!isset($_SESSION)) {//Verificar se a sessão não já está aberta.
     session_start();
-  }
+}
 
 class conectar{
 

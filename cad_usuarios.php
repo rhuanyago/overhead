@@ -1,7 +1,9 @@
 <?php 
 include 'menu_layout.php'; 
 require_once "Connections/conexao.php";
-
+require_once "classes/class.vision.php";
+$obj = new vision();
+$permissao = $obj->pegarPermissao();
 ?>
 
 
@@ -153,15 +155,9 @@ require_once "Connections/conexao.php";
 												</span>
 												<select name="permissao" id="permissao" class="form-control">
 													<option value="">Selecione</option>
-													<?php
-													$c = new conectar();
-													$conexao=$c->conexao();
-													
-													$sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao";
-													$sql = $conexao->query($sql);
-													while ($rows_rsperm = mysqli_fetch_assoc($sql)) { ?>
-														<option value="<?php echo $rows_rsperm['idpermissao'] ?>"><?php echo $rows_rsperm['permissao'] ?></option>
-													<?php } ?>
+													<?php foreach ($permissao as $key => $permissao) {
+                                                        echo $permissao;
+                                                    } ?>
 												</select>
 											</div>
 										</div>
