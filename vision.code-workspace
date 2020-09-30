@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "SSH FS - graph",
+			"uri": "ssh://graph/"
 		}
 	],
 	"settings": {}
