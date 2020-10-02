@@ -42,11 +42,25 @@
         $ipv4Wan = '::';
     }
 
+    //IP IPV6 WAN
+    if(isset($valueDevice['IP']['Interface'][3]['IPv6Address'][1]['IPAddress']['_value'])){
+        $ipv6Wan = $valueDevice['IP']['Interface'][3]['IPv4Address'][1]['IPAddress']['_value'];
+    }else{
+        $ipv6Wan = '::';
+    }
+
     //Gateway Padrão WAN
     if(isset($valueDevice['PPP']['Interface'][1]['IPCP']['RemoteIPAddress']['_value'])){
         $gatewayPadraoWan = $valueDevice['PPP']['Interface'][1]['IPCP']['RemoteIPAddress']['_value'];
     }else{
         $gatewayPadraoWan = '::';
+    }
+
+    //Gateway Padrão WAN V6
+    if(isset($valueDevice['PPP']['Interface'][1]['IPv6CP']['RemoteInterfaceIdentifier']['_value'])){
+        $gatewayPadraoV6Wan = $valueDevice['PPP']['Interface'][1]['IPCP']['RemoteIPAddress']['_value'];
+    }else{
+        $gatewayPadraoV6Wan = '::';
     }
 
     //DNS WAN
@@ -55,6 +69,38 @@
     }else{
         $dnsWan = '::';
     }
+    //    ----------------- INFOS LAN -------------------
+    
+    //MAC LAN
+    if(isset($valueDevice['Ethernet']['Link'][1]['MACAddress']['_value'])){
+        $macLan = $valueDevice['Ethernet']['Link'][1]['MACAddress']['_value'];
+    }
+
+    //IP LAN
+    if(isset($valueDevice['IP']['Interface'][1]['IPv4Address'][1]['IPAddress']['_value'])){
+        $ipLan = $valueDevice['IP']['Interface'][1]['IPv4Address'][1]['IPAddress']['_value'];
+    }
+
+    //IP LAN V6
+    if(isset($valueDevice['IP']['Interface'][1]['IPv6Address'][1]['IPAddress']['_value'])){
+        $ipLanV6 = $valueDevice['IP']['Interface'][1]['IPv4Address'][1]['IPAddress']['_value'];
+    }
+
+    //SUB-REDE
+    if(isset($valueDevice['IP']['Interface'][1]['IPv4Address'][1]['SubnetMask']['_value'])){
+        $ipLan = $valueDevice['IP']['Interface'][1]['IPv4Address'][1]['SubnetMask']['_value'];
+    }
+
+    //Clientes DHCP
+    if(isset($valueDevice['Hosts']['HostNumberOfEntries']['_value'])){
+        $dhcp = $valueDevice['Hosts']['HostNumberOfEntries']['_value'];
+    }
+
+    //DNS PRIMARIO E SECUNDÁRIO
+    if(isset($valueDevice['DHCPv4']['Server']['Pool'][1]['DNSServers']['_value'])){
+        $dnsLan = $valueDevice['DHCPv4']['Server']['Pool'][1]['DNSServers']['_value'];
+    }
+
 
     // ---------------------------------  WI-FI ------------------------------------------
 
@@ -107,8 +153,8 @@
     // -------------------- DISPOSITIVOS ------------------------------
     //UpTime
     if(isset($valueDevice['DeviceInfo']['UpTime']['_value'])){
-        $segundos = $valueDevice['DeviceInfo']['UpTime']['_value'];
-        //$segundos = '1846';
+        //$segundos = $valueDevice['DeviceInfo']['UpTime']['_value'];
+        $segundos = '109634';
         $dtF = new \DateTime('@0');
         $dtT = new \DateTime("@$segundos");
     
