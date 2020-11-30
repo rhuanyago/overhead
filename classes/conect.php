@@ -205,6 +205,7 @@ if ($parametrotela == 'ultimosPedidos') {
 
    $result = $obj->ultimosPedidos();
 
+   $arr = [];
    foreach ($result as $key => $row) {
        
     $idpedido = $row['idpedido'];
@@ -227,8 +228,7 @@ if ($parametrotela == 'ultimosPedidos') {
     $btn .= "<a class='btn btn-dark text-white text-center' title='Verificar Pedido' href='pedido_itens.php?idpedido=".$idpedido."'><i class='fas fa-pencil-alt'></i></a>";
     $btn .= "<a class='btn btn-danger text-white text-center' title='Excluir Pedido' id='btnExcluirPedidos' data-idpedido='".$idpedido."' data-idcomanda='".$comanda."'><i class='far fa-trash-alt'></i></a>";
 
-    $arr[] = [$idpedido, $comanda, $nome, $status, $titulo, $hora, $valor, $btn];
-    
+    $arr[] = [$idpedido, $comanda, $nome, $status, $titulo, $hora, $valor, $btn];    
 
    }
 

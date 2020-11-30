@@ -1,6 +1,6 @@
 <?php
 
-    $segundos = '1846';
+    $segundos = '664712';
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$segundos");
 
@@ -14,7 +14,26 @@
         $tempoConexaoDisp = date('d/m/Y H:i:s', strtotime('-'.$dateDiff->i.' minutes'));
     } 
 
-    //echo $tempoConexaoDisp;
+    echo $tempoConexaoDisp.'<br>';
+
+   
+
+
+    if ($dateDiff->d > 0) {
+        $tempoConexaoDisp = $dateDiff->d. ' dia(s) ' . $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos' ;
+    }elseif ($dateDiff->h > 0) {
+        $tempoConexaoDisp = $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos';
+    }elseif ($dateDiff->i > 0) {
+        $tempoConexaoDisp = $dateDiff->i . ' minutos e ' . $dateDiff->s . ' segundos';
+    }elseif ($dateDiff->m > 0) {
+        $tempoConexaoDisp = $dateDiff->m. ' meses ' . $dateDiff->d. ' dias ' . $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos';
+    }elseif ($dateDiff->s >= 0) {
+        $tempoConexaoDisp = $dateDiff->s . ' segundos';
+    }elseif ($dateDiff->y > 0) {
+        $tempoConexaoDisp = $dateDiff->y. ' anos ' . $dateDiff->m. ' meses ' . $dateDiff->d. ' dias ' . $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos e ' .  $dateDiff->s . ' segundos';
+    }
+
+    echo $tempoConexaoDisp;
 
 
     $valueDevice = $value['Device'];

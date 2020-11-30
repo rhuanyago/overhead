@@ -7,8 +7,6 @@
 
  ?>
 
-
-
  <style>
 .oculto {
     display: none;
@@ -19,9 +17,6 @@
 
 
  </style>
-
-
-
 
  <section role="main" class="content-body">
      <header class="page-header page-header-left-breadcrumb">

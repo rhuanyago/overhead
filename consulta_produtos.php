@@ -160,7 +160,7 @@ $conexao = $c->conexao();
                 gerarDadosUP();
             }
         });
-    });
+    
 
     </script>
     

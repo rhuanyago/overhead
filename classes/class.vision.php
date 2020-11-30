@@ -82,17 +82,11 @@ class vision{
         $email = $dados[0];
         $senha = md5($dados[1]);
 
-        $sql = "SELECT a.*, c.permissao FROM tbusuarios a, tbpermissao c WHERE email = '$email' and senha = '$senha' and a.idpermissao = c.idpermissao limit 1  ";
+        $sql = "SELECT a.*, c.permissao FROM tbusuarios a, tbpermissao c WHERE email = '$email' and senha = '$senha' and a.idpermissao = c.idpermissao limit 1 ";
         $sql = $conexao->query($sql);
         $row = $sql->fetch_assoc();
 
-        if($row['habilitado'] == 'N'){      
-            $_SESSION['email'] = $email;
-            $_SESSION['ip'] = $_SERVER["REMOTE_ADDR"];            
-            $mensagem = "O Usuário $email tentou fazer login e não está habilitado!";
-            $this->salvaLog($mensagem);
-            return 2;           
-        }
+        
 
         if ($sql->num_rows == 1) {
             $_SESSION['chave_acesso'] = md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@!');
