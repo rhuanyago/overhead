@@ -1,11 +1,11 @@
- <?php 
- require_once "menu_layout.php" ;
- require_once "Connections/conexao.php";
- require_once "classes/class.vision.php";
+<?php 
+require_once "menu_layout.php" ;
+require_once "Connections/conexao.php";
+require_once "classes/class.vision.php";
 
     $obj = new vision();
 
- ?>
+?>
 
  <style>
 .oculto {
@@ -230,7 +230,6 @@ $(document).on("click", "#btnExcluirPedidos", function () { //Função Modal Edi
     var cont = 0;
     var tabela = 0;
     gerarDadosUP();
-
     function gerarDadosUP() {
         //$('#loading_table2').show();  
         $.ajax({
@@ -241,7 +240,7 @@ $(document).on("click", "#btnExcluirPedidos", function () { //Função Modal Edi
             },
             success: function(data) {
                 //$('#loading_table2').hide();                                                                                                          
-                dados = null;
+                // dados = null;
                 dados = JSON.parse(data);
                 if (cont == 0) {
                     cont++

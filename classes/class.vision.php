@@ -1,19 +1,62 @@
 <?php
+// require_once "../Connections/conexao2.php";
 
 if (!isset($_SESSION)) {//Verificar se a sessão não já está aberta.
     session_start();
-  }
-
+}	
 
 class vision{
 
     public $obj;
-    public $conexao;    
+    public $conexao;       
 
-    function salvaLog($mensagem) {
+    public function __construct()
+    {   
         $c = new conectar();
-        $conexao=$c->conexao();
+        $this->conexao = $c->conexao();
+        // $this->conecta=Conecta();
+    }
+
+    function ExecutaConsulta($conexao,$sql){
+        $valor=func_get_args();
+        $valores=array_slice($valor,2);
+        $preparado=$conexao->query($sql);
+        // $preparado=$conexao->prepare($sql);
+        // $preparado->execute($valores);
+        // $executar=$preparado->fetchAll();
+        $executar=$preparado->fetch_assoc();
+      
+        // $arrTmp[] = $executar;
+      
+        // $arr = [];
+        // foreach($arrTmp as $item){
+        //   foreach($item as $kk){
+        //     $arr[] = $kk;
+        //   }
+        // }
+        return $executar;
+      
+    }
+
+    // function ExecutaConsulta($conexao,$sql){
+    //  // realizando o SQL
+    // //  $sql = ('SELECT * FROM tbusuarios;');
+
+    //  // Realizando a conexão
+ 
+    //  $prepare_sql = $conexao->prepare($sql);
+ 
+    //  $prepare_sql->execute();
         
+     
+    //  return $prepare_sql->fetch(PDO::FETCH_ASSOC);
+
+    // }
+
+    
+    function salvaLog($mensagem) {
+        //$c = new conectar();
+        ////$conexao=$c->conexao();        
 
         $email = $_SESSION['email'];
         $ip = $_SESSION['ip']; // Salva o IP do visitante
@@ -22,17 +65,17 @@ class vision{
         $sql = "INSERT INTO logs (email, hora, ip, mensagem) VALUES 
         ('$email', NOW(), '$ip', '$mensagem') ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
     }
 
     public function consultarLogs(){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.*, DATE_FORMAT(hora,'%d/%m/%Y %H:%i:%s') AS hora, a.idusuario FROM sistema.logs c, tbusuarios a WHERE a.email = c.email;";
-        $sql = $conexao->query($sql);  
+        $sql = $this->conexao->query($sql);  
 
         $dados = array();
 
@@ -52,11 +95,11 @@ class vision{
     }
 
     public function registrarUsuario($dados){
-            $c = new conectar();
-            $conexao=$c->conexao();
+            //$c = new conectar();
+            ////$conexao=$c->conexao();
 
             $sql = "SELECT count(*) as total from tbusuarios WHERE email = '$dados[1]' ";
-            $sql = $conexao->query($sql);
+            $sql = $this->conexao->query($sql);
             $row = $sql->fetch_assoc();
 
             if($row['total'] >= 1){
@@ -70,25 +113,30 @@ class vision{
             $sqlins = "INSERT INTO tbusuarios (nome, email, senha, senha_confirma, dt_nascimento, telefone, data_criacao, habilitado, idpermissao) VALUES 
             ('$dados[0]', '$dados[1]', '$dados[2]', '$dados[3]', '$dados[4]', '$dados[5]', NOW(), 'S', '$dados[6]' )";
 
-            return $conexao->query($sqlins);
+            return $this->conexao->query($sqlins);
 
             }
     }
 
     public function Login($dados){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        // //$c = new conectar();
+        // //$conexao = $c->conexao();
 
         $email = $dados[0];
         $senha = md5($dados[1]);
 
         $sql = "SELECT a.*, c.permissao FROM tbusuarios a, tbpermissao c WHERE email = '$email' and senha = '$senha' and a.idpermissao = c.idpermissao limit 1 ";
-        $sql = $conexao->query($sql);
-        $row = $sql->fetch_assoc();
+        $row = $this->ExecutaConsulta($this->conexao, $sql);
 
-        
+        // print_r($sql);
 
-        if ($sql->num_rows == 1) {
+        // $sql=ExecutaConsulta($this->conecta,$sql);
+        // $sql = $this->conexao->query($sql);
+        // $sql = $this->conexao->query($sql);
+        // $row = $sql->fetch_assoc();
+        // print_r($row);      
+
+        if ($row) {
             $_SESSION['chave_acesso'] = md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@!');
             $_SESSION['email'] = $email;
             $_SESSION['nome'] = $row['nome'];
@@ -108,8 +156,8 @@ class vision{
 
     public function registrarCliente($dados){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $nome = $dados[0];
         $rg = $dados[1];
@@ -118,7 +166,7 @@ class vision{
         $usuid = $_SESSION['usuid'];
 
         $sql = "SELECT count(*) as total from tbclientes WHERE rg = '$rg' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if($row['total'] == 1){
@@ -131,7 +179,7 @@ class vision{
         $mensagem = "O Usuário ".$_SESSION['email']." cadastrou o Cliente $nome ";
         $this->salvaLog($mensagem);
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
         }
 
@@ -139,11 +187,11 @@ class vision{
 
     public function consultarCategoria(){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * from tbcategorias order by idcategoria; ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         $dados = array();
 
@@ -162,11 +210,11 @@ class vision{
 
     public function adicionarCategoria($categoria, $habilitado){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as total from tbcategorias where nome='$categoria' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if ($row['total'] == 1) {
@@ -176,7 +224,7 @@ class vision{
         }else{
             $sql = "INSERT INTO tbcategorias (nome, habilitado) VALUES ('$categoria','$habilitado')";
 
-            return $conexao->query($sql);
+            return $this->conexao->query($sql);
 
         
         }
@@ -185,11 +233,11 @@ class vision{
 
     public function atualizarCategoria($idcategoria, $categoria, $habilitado){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as total from tbcategorias where nome='$categoria' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         if(empty($categoria)) {
             return 2;
@@ -197,7 +245,7 @@ class vision{
 
             $sql = "UPDATE tbcategorias SET nome = '$categoria', habilitado = '$habilitado' WHERE idcategoria = '$idcategoria' ";
 
-            echo $conexao->query($sql);
+            echo $this->conexao->query($sql);
         
         }
 
@@ -205,12 +253,12 @@ class vision{
 
     public function excluirCategoria($idcategoria){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbcategorias WHERE idcategoria = '$idcategoria' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
@@ -218,21 +266,21 @@ class vision{
 
     public function atualizarClientes($reg,$nome,$rg,$telefone,$dtnascimento,$habilitado){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $usuid = $_SESSION['usuid'];
         $_SESSION['nomeAnterior'] = $nome;
 
         $sql = "SELECT reg,rg FROM tbclientes c WHERE reg = '$reg' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if (empty($nome) || empty($rg) || empty($telefone) || empty($dtnascimento)){
             return 2;
         }else if($rg != $row['rg']){
             $sql = "SELECT count(*) as existe FROM tbclientes c WHERE rg = '$rg' ";
-            $sql = $conexao->query($sql);
+            $sql = $this->conexao->query($sql);
             $row = $sql->fetch_assoc();
 
             if ($row['existe'] >= 1 ) {
@@ -240,7 +288,7 @@ class vision{
             }else{             
 
                 $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
-                echo $conexao->query($sql);
+                echo $this->conexao->query($sql);
 
                 $mensagem = "O Usuário ".$_SESSION['email']." atualizou o Cliente para $nome ";
                 $this->salvaLog($mensagem);
@@ -250,7 +298,7 @@ class vision{
 
             $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
 
-            echo $conexao->query($sql);
+            echo $this->conexao->query($sql);
 
             $mensagem = "O Usuário ".$_SESSION['email']." atualizou o Cliente para $nome ";
             $this->salvaLog($mensagem);
@@ -263,30 +311,30 @@ class vision{
 
     public function excluirCliente($reg){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbclientes WHERE reg = '$reg' ";        
         
         $mensagem = "O Usuário ".$_SESSION['email']." excluiu o Cliente com o REG $reg ";
         $this->salvaLog($mensagem);
 
-        return $conexao->query($sql);         
+        return $this->conexao->query($sql);         
         
 
     }
 
     public function adicionarProdutos($categoria, $nome, $referencia, $preco, $habilitado){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $preco = str_replace(",", ".", $preco);
 
         $usuid = $_SESSION['usuid'];
 
         $sql = "SELECT * FROM tbproduto where referencia = '$referencia' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->num_rows;
 
         
@@ -298,18 +346,18 @@ class vision{
         }else {
             $sql = "INSERT INTO tbproduto (referencia, idcategoria, preco, descricao, habilitado, usuid) VALUES ('$referencia', '$categoria', '$preco', '$nome', '$habilitado', '$usuid')";
         
-            return $conexao->query($sql);
+            return $this->conexao->query($sql);
         }
 
     }
 
     public function consultarCliente(){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * FROM tbclientes order by nome; ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         $dados = array();
 
@@ -331,12 +379,12 @@ class vision{
 
     public function ultimosPedidos(){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
 
         $sql = "SELECT a.*, c.nome,date_format(data_inc, '%H:%i') AS hora FROM tbpedidos a,tbclientes c where c.reg = a.reg and a.status = 'A' order by a.idpedido desc;";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         $dados = array();
 
@@ -362,11 +410,11 @@ class vision{
     }
 
     public function consultarUsuario(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.*, a.permissao FROM tbusuarios c, tbpermissao a where c.idpermissao = a.idpermissao order by c.nome";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         $dados = array();
 
@@ -401,40 +449,40 @@ class vision{
 
     public function atualizarUsuarios($idusuario, $nome, $email, $senha, $senha_confirma, $telefone, $dtnascimento, $habilitado, $idpermissao){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as total from tbusuarios WHERE email = '$email' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
         
         if($senha != $senha_confirma){
             return 2;
         }elseif ($senha == '' || $senha == null && $senha_confirma == '' || $senha_confirma == null ) {
             $sql = "UPDATE tbusuarios SET nome = '$nome', email='$email', dt_nascimento='$dtnascimento', telefone='$telefone', data_modificado = NOW(), habilitado='$habilitado', idpermissao='$idpermissao' WHERE idusuario = '$idusuario' ";
-            echo $conexao->query($sql);
+            echo $this->conexao->query($sql);
         }else{
         $sql = "UPDATE tbusuarios SET nome = '$nome', email='$email', senha='$senha', senha_confirma='$senha_confirma' dt_nascimento='$dtnascimento', telefone='$telefone', data_modificado = NOW(), habilitado='$habilitado', idpermissao='$idpermissao' WHERE idusuario = '$idusuario' ";
 
-        echo $conexao->query($sql);
+        echo $this->conexao->query($sql);
         }
     }  
     
     public function excluirUsuarios($idusuario){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbusuarios WHERE idusuario = '$idusuario' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
     }
 
     public function consultarProdutos(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.nome,a.* FROM tbproduto a, tbcategorias c where a.idcategoria = c.idcategoria order by a.referencia";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $dados = array();
 
         while ($row = $sql->fetch_assoc()) {
@@ -464,8 +512,8 @@ class vision{
 
 
     public function atualizarProdutos($idproduto, $idcategoria, $descricao, $referencia, $preco, $habilitado){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $usuid = $_SESSION['usuid'];
         
@@ -477,41 +525,41 @@ class vision{
 
        $sql = "UPDATE tbproduto SET referencia = '$referencia', idcategoria = '$idcategoria', preco = '$preco', descricao = '$descricao', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE id = '$idproduto'  ";
 
-        echo $conexao->query($sql);
+        echo $this->conexao->query($sql);
         }
 
     }
 
     public function excluirProdutos($idproduto, $referencia){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbproduto WHERE id = '$idproduto' and referencia = '$referencia' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
 
 
     public function gerarVenda($titulo){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
 
         $sql = "INSERT INTO tbpedidos (reg, tipo, titulo, data_inc) VALUES ('99','V','$titulo', NOW()) ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
 
     public function ultimoPedido(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $query = "SELECT max(idpedido)idpedido FROM tbpedidos c;";
-        $query = $conexao->query($query);
+        $query = $this->conexao->query($query);
         $row = $query->fetch_assoc();
 
         return $row;
@@ -519,11 +567,11 @@ class vision{
     }
 
     public function listaCategoria(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * from tbcategorias order by idcategoria";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         while ($row = $sql->fetch_assoc()) {
             $data[] = $row;
@@ -535,11 +583,11 @@ class vision{
     }
 
     public function pegarProdutos($idcategoria){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * from tbproduto where idcategoria = '$idcategoria' and habilitado = 'S'";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         
         $option2 = '<option value="" selected>Selecione o Produto</option>';
         $data[] = $option2;
@@ -555,11 +603,11 @@ class vision{
     }
 
     public function pegaDescProdutos($referencia){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.referencia,c.descricao,c.preco,c.habilitado FROM tbproduto c where c.referencia = '$referencia' and c.habilitado = 'S'";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_array();
 
         $preco = $row['preco'];
@@ -578,12 +626,12 @@ class vision{
 
     public function listarItens($idpedido){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.* from tbproduto b, tbpedidos_item c where b.descricao = c.descricao and c.idpedido = '$idpedido' and b.habilitado='S' order by iditem ";
 
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $dados = array();
 
         while ($row = $sql->fetch_assoc()) {
@@ -617,20 +665,20 @@ class vision{
     }
 
     public function atualizarQuantidade($idpedido, $iditem, $referencia, $quantidade){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade' WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
     }
 
     public function adicionarProduto($idpedido, $referencia, $preco, $qtde, $descricao){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT c.iditem,c.quantidade, count(*) as existe FROM sistema.tbpedidos_item c where idpedido = '$idpedido' and referencia = '$referencia';";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if ($row['existe'] >= 1) {
@@ -641,25 +689,25 @@ class vision{
             $sql = "INSERT INTO tbpedidos_item (idpedido, referencia, descricao, quantidade, valor) VALUES ('$idpedido', '$referencia', '$descricao', '$qtde', '$preco')";
         }
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
     }
 
     public function excluirItem($idpedido, $iditem){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
         
         $sql = "DELETE FROM tbpedidos_item WHERE idpedido = '$idpedido' and iditem = '$iditem' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
     }
 
     public function totalMes(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = " SELECT ifnull(sum(c.valor+c.troco),0) as total from tbpedido_pagamento c WHERE MONTH(c.data_pagamento) = MONTH(now()) and c.status = 'F';";
-        $rstotal = $conexao->query($sql);
+        $rstotal = $this->conexao->query($sql);
         $result = $rstotal->fetch_assoc();
         $totalgeral = $result['total'];
 
@@ -667,11 +715,11 @@ class vision{
     }
     
     public function vendasMes(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = " SELECT ifnull(count(*),0) as vendames FROM tbpedidos c WHERE MONTH(c.data_finaliza) = MONTH(now()) and c.status = 'F';";
-        $rsvendames = $conexao->query($sql);
+        $rsvendames = $this->conexao->query($sql);
         $result2 = $rsvendames->fetch_array();
         $totalmes = $result2['vendames'];
 
@@ -679,11 +727,11 @@ class vision{
     }
 
     public function totalDia(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = " SELECT ifnull(sum(c.valor),0) as total, ifnull(sum(c.troco),0) as troco from tbpedido_pagamento c WHERE DAY(c.data_pagamento) = DAY(now()) and c.status = 'F';";
-        $rstotal = $conexao->query($sql);
+        $rstotal = $this->conexao->query($sql);
         $result = $rstotal->fetch_array();
         $totalvendas = $result['total'];
         $totaltroco = $result['troco'];
@@ -702,11 +750,11 @@ class vision{
     }
 
     public function vendasHoje(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT ifnull(count(*),0) as total FROM tbpedidos c WHERE DAY(c.data_finaliza) = Day(now()) and c.status = 'F';";
-        $rsvendahj = $conexao->query($sql);
+        $rsvendahj = $this->conexao->query($sql);
         $result = $rsvendahj->fetch_array();
         $vendashoje = $result['total'];
 
@@ -714,11 +762,11 @@ class vision{
     }
 
     public function totCadastrosMes(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT ifnull(count(*),0) as total FROM tbclientes a WHERE MONTH(a.data_cadastro) = Month(now());";
-        $rsclimes = $conexao->query($sql);
+        $rsclimes = $this->conexao->query($sql);
         $result = $rsclimes->fetch_array();
         $rstotclimes = $result['total'];
 
@@ -726,11 +774,11 @@ class vision{
     }
 
     public function totClientesCadastrados(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT ifnull(count(*),0) as total FROM tbclientes ";
-        $rsclitot = $conexao->query($sql);
+        $rsclitot = $this->conexao->query($sql);
         $result = $rsclitot->fetch_array();
         $rstotcli = $result['total'];
 
@@ -738,11 +786,11 @@ class vision{
     }
 
     public function adicionarPermissao($permissao, $habilitado){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as total FROM tbpermissao WHERE permissao = '$permissao' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if ($row['total'] >= 1) {
@@ -751,16 +799,16 @@ class vision{
             $sql = "INSERT INTO tbpermissao (permissao, habilitado) VALUES ('$permissao','$habilitado') ";
         }
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
     }
 
     public function consultarPermissao(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao;";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
 
         $dados = array();
 
@@ -791,18 +839,18 @@ class vision{
     }
 
     public function atualizarPermissao($idpermissao,$permissao,$habilitado){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT permissao from tbpermissao where permissao='$permissao' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if(empty($permissao)) {
             return 2;
         }else if($permissao != $row['permissao']){
             $sql = "SELECT count(*) as total from tbpermissao where permissao='$permissao' ";
-            $sql = $conexao->query($sql);
+            $sql = $this->conexao->query($sql);
             $row = $sql->fetch_assoc();
 
             if ($row['total'] >= 1) {
@@ -810,14 +858,14 @@ class vision{
             }else {
                 $sql = "UPDATE tbpermissao SET permissao = '$permissao', habilitado = '$habilitado' WHERE idpermissao = '$idpermissao' ";
 
-                echo $conexao->query($sql);
+                echo $this->conexao->query($sql);
             }
 
         }else{
 
             $sql = "UPDATE tbcategorias SET nome = '$permissao', habilitado = '$habilitado' WHERE idcategoria = '$idpermissao' ";
 
-            echo $conexao->query($sql);
+            echo $this->conexao->query($sql);
         
         }
 
@@ -826,22 +874,22 @@ class vision{
 
     public function excluirPermissao($idpermissao){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbpermissao WHERE idpermissao = '$idpermissao' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
 
     public function adicionarTela($nomeTela,$idpermissao){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as existe FROM tbpermissao_pages WHERE idpermissao = '$idpermissao' and permissao_pages = '$nomeTela' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if ($row['existe'] >= 1) {
@@ -851,16 +899,16 @@ class vision{
             
         }
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
     }
 
     public function registrarPaginas($nome, $url){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT count(*) as existe FROM tbpaginas WHERE paginas like '$url%' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
         if ($row['existe'] >= 1) {
@@ -870,16 +918,16 @@ class vision{
             
         }
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
     }
 
     public function consultaPaginas(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * FROM tbpaginas order by idpaginas";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $dados = array();
 
         while ($row = $sql->fetch_assoc()) {
@@ -897,34 +945,34 @@ class vision{
 
     public function excluirPaginas($idpaginas){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "DELETE FROM tbpaginas WHERE idpaginas = '$idpaginas' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
 
     public function AtualizarPaginas($idpaginas,$pagina,$url){
 
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "UPDATE tbpaginas SET paginas='$url', nome_paginas='$pagina' WHERE idpaginas = '$idpaginas' ";
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
 
 
     }
 
     public function formaPagamento($idpedido){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT a.nome,b.* FROM tbclientes a, tbpedidos b where a.reg = b.reg and idpedido = '$idpedido' ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
         $dados = array();
 
@@ -945,8 +993,8 @@ class vision{
     }
 
     public function excluirPedidos($idpedido,$idcomanda){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql1 = "UPDATE tbpedidos SET status='D' WHERE idpedido='$idpedido' ";        
 
@@ -954,37 +1002,37 @@ class vision{
 
         $this->deletaPagamento($idpedido);
 
-        return $conexao->query($sql1);
+        return $this->conexao->query($sql1);
         
     }
 
     function atualizaComanda($idcomanda){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "UPDATE tbcomanda SET status='A' WHERE idcomanda='$idcomanda' ";
 
         $mensagem = "A Comanda $idcomanda pode ser usada novamente!";
         $this->salvaLog($mensagem);
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
     }
     
     function deletaPagamento($idpedido){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "UPDATE tbpedido_pagamento SET status='D' WHERE idpedido ='$idpedido' ";
 
         $mensagem = "O Pagamento do Pedido $idpedido foi deletado!";
         $this->salvaLog($mensagem);
 
-        return $conexao->query($sql);
+        return $this->conexao->query($sql);
     }
 
     public function adicionarForma($idpedido,$forma,$tipo,$valor,$valorrecebido){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $valor=str_replace(",",".",$valor);
         $valorrecebido=str_replace(",",".",$valorrecebido);
@@ -1000,13 +1048,13 @@ class vision{
 
                 $sql = "INSERT INTO tbpedido_pagamento (idpedido, forma, valor, troco, tipo) VALUES ('$idpedido', '$forma', '$valor', '$troco', '$tipo') ";
         
-                return $conexao->query($sql);
+                return $this->conexao->query($sql);
         
             }else{
 
                 $sql = "INSERT INTO tbpedido_pagamento (idpedido, forma, valor, troco, tipo) VALUES ('$idpedido', '$forma', '$valor', '0', '$tipo') ";
 
-                return $conexao->query($sql);
+                return $this->conexao->query($sql);
 
             }
 
@@ -1015,11 +1063,11 @@ class vision{
     }
 
     public function listarFormasPagamento($idpedido){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * FROM tbpedido_pagamento c,tbformas_pagamento b where c.idpedido = '$idpedido' and c.forma = b.idforma_pagamento; ";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
         $dados = array();
             
@@ -1041,11 +1089,11 @@ class vision{
     }
 
     public function pegarCategoria(){
-        $c = new conectar();
-        $conexao = $c->conexao();
+        //$c = new conectar();
+        //$conexao = $c->conexao();
 
         $sql = "SELECT * from tbcategorias order by idcategoria";
-        $result3 = $conexao->query($sql);
+        $result3 = $this->conexao->query($sql);
         while ($rows_rscat = $result3->fetch_assoc()) { 
             $option = '<option value="'.$rows_rscat['idcategoria'].'">'.$rows_rscat['idcategoria'].' - '.$rows_rscat['nome'].'</option>';
             $arr[] = $option;
@@ -1055,11 +1103,11 @@ class vision{
     }
 
     public function pegarPermissao(){
-        $c = new conectar();
-        $conexao=$c->conexao();
+        //$c = new conectar();
+        ////$conexao=$c->conexao();
         
         $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao";
-        $sql = $conexao->query($sql);
+        $sql = $this->conexao->query($sql);
         while ($rows_rsperm = mysqli_fetch_assoc($sql)) { 
             $option[] = '<option value="'.$rows_rsperm['idpermissao'].'">'.$rows_rsperm['permissao'].'</option>';
         } 

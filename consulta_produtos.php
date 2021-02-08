@@ -161,6 +161,7 @@ $conexao = $c->conexao();
             }
         });
     
+    });
 
     </script>
     

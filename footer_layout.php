@@ -9,7 +9,8 @@
 	<script src="vendor/nanoscroller/nanoscroller.js"></script>
 	<script src="vendor/magnific-popup/jquery.magnific-popup.js"></script>
 	<script src="vendor/jquery-placeholder/jquery-placeholder.js"></script>
-
+	<script src="vendor/datatables/media/js/jquery.dataTables.min.js"></script>		
+	<script src="vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
 	<!-- Specific Page Vendor -->
 	<script src="vendor/jquery-ui/jquery-ui.js"></script>
 	<script src="vendor/jqueryui-touch-punch/jqueryui-touch-punch.js"></script>
@@ -35,8 +36,7 @@
 	<script src="vendor/bootstrap-maxlength/bootstrap-maxlength.js"></script>
 	<script src="vendor/ios7-switch/ios7-switch.js"></script>
 	<script src="js/examples/examples.loading.overlay.js"></script>	
-	<script src="vendor/datatables/media/js/jquery.dataTables.min.js"></script>		
-	<script src="vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
+	
 	<!-- Theme Base, Components and Settings -->
 	<script src="js/theme.js"></script>
 

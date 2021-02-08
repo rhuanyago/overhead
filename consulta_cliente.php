@@ -4,7 +4,6 @@ require_once "Connections/conexao.php";
 
 ?>
 
-
 <style>
 .oculto{
 	display:none;		
@@ -156,7 +155,7 @@ require_once "Connections/conexao.php";
 
     </script>
     
-    <script>
+<script>
     $(document).on("click", "#btnAtualizaClientes", function () { //Função Modal Editar MAC
         var reg = $(this).attr('data-reg'); //Pegando os dados que são passados no botão
         var nome = $(this).attr('data-nome');  //Pegando os dados que são passados no botão
@@ -241,7 +240,7 @@ function gerarDadosUP(){
                         {title: 'Telefone' },    
                         {title: 'Data de Nascimento' },                        
                         {title: 'Habilitado' } ,    
-                        {title: 'Açoes'  },                                               
+                        {title: 'Ações'  },                                               
                     ],
                     language: { //PROPRIEDADES DO DATATABLE
 						"sEmptyTable": "Nenhum registro encontrado nesse período",

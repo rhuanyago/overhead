@@ -23,11 +23,7 @@ private $db_name = "sistema";
 
   return $conexao;
 
-}    
-
-
-  
- 
+  }    
 
 
 
