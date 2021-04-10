@@ -462,9 +462,9 @@ class vision{
             $sql = "UPDATE tbusuarios SET nome = '$nome', email='$email', dt_nascimento='$dtnascimento', telefone='$telefone', data_modificado = NOW(), habilitado='$habilitado', idpermissao='$idpermissao' WHERE idusuario = '$idusuario' ";
             echo $this->conexao->query($sql);
         }else{
-        $sql = "UPDATE tbusuarios SET nome = '$nome', email='$email', senha='$senha', senha_confirma='$senha_confirma' dt_nascimento='$dtnascimento', telefone='$telefone', data_modificado = NOW(), habilitado='$habilitado', idpermissao='$idpermissao' WHERE idusuario = '$idusuario' ";
+            $sql = "UPDATE tbusuarios SET nome = '$nome', email='$email', senha='$senha', senha_confirma='$senha_confirma' dt_nascimento='$dtnascimento', telefone='$telefone', data_modificado = NOW(), habilitado='$habilitado', idpermissao='$idpermissao' WHERE idusuario = '$idusuario' ";
 
-        echo $this->conexao->query($sql);
+            echo $this->conexao->query($sql);
         }
     }  
     

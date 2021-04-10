@@ -72,7 +72,18 @@ require_once "classes/class.vision.php";
                          </div>
                      </div>               
                      <table class="table table-responsive-md table-hover mb-0" id="ultimosPedidos">
-
+                        <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Comanda</th>
+                                <th>Nome</th>                                
+                                <th>Status</th>  
+                                <th>Titulo</th>
+                                <th>Hora</th>
+                                <th>Valor</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
                      </table>
                  </div>
              </section>
@@ -224,98 +235,39 @@ $(document).on("click", "#btnExcluirPedidos", function () { //Função Modal Edi
 
 </script>    
 
+<script>
 
- <script>
+$(document).ready(function() {
 
-    var cont = 0;
-    var tabela = 0;
-    gerarDadosUP();
-    function gerarDadosUP() {
-        //$('#loading_table2').show();  
-        $.ajax({
-            type: 'POST',
-            url: 'classes/conect.php',
-            data: {
+    ultimosPedidos = $('#ultimosPedidos').DataTable({  
+        "ajax":{            
+            "url": "classes/conect.php", 
+            "method": 'POST', //usamos el metodo POST
+            "data":{
                 paramTela: 'ultimosPedidos'
-            },
-            success: function(data) {
-                //$('#loading_table2').hide();                                                                                                          
-                // dados = null;
-                dados = JSON.parse(data);
-                if (cont == 0) {
-                    cont++
-                } else {
-                    tabela.destroy();
-                }
-                // dados = [dados];
-                tabela = $('#ultimosPedidos').DataTable({
-                    "aaSorting": [
-                        [0, "desc"]
-                    ], //ordenação da 2° coluna do datatable para descendente 
-                    "bInfo": false,
-                    "scrollX": false, // cria o scroll no dataTable   
-                    // paging: false,     
-                    searching: true,
-                    ordering: true,
-                    data: dados,
-                    columns: [ //head da table direto no javascript
-                        {
-                            title: 'Pedido'
-                        },
-                        {
-                            title: 'Comanda'
-                        },
-                        {
-                            title: 'Nome'
-                        },
-                        {
-                            title: 'Status'
-                        },
-                        {
-                            title: 'Titulo'
-                        },
-                        {
-                            title: 'Hora'
-                        },
-                        {
-                            title: 'Valor'
-                        },
-                        {
-                            title: 'Ações'
-                        },
-                    ],
-                    language: { //PROPRIEDADES DO DATATABLE
-                        "sEmptyTable": "Nenhum registro encontrado nesse período",
-                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                        "sInfoFiltered": "(Filtrados de MAX registros)",
-                        "sInfoPostFix": "",
-                        "sInfoThousands": ".",
-                        "sLengthMenu": "_MENU_ Resultados por página",
-                        "sLoadingRecords": "Carregando...",
-                        "sProcessing": "Processando...",
-                        "sZeroRecords": "Nenhum registro encontrado",
-                        "sSearch": "Pesquisar",
-                        "oPaginate": {
-                            "sNext": "Próximo",
-                            "sPrevious": "Anterior",
-                            "sFirst": "Primeiro",
-                            "sLast": "Último"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Ordenar colunas de forma ascendente",
-                            "sSortDescending": ": Ordenar colunas de forma descendente"
-                        },
-                        "buttons": {
-                            "copyTitle": "Copiar linhas"
-                        }
-                    }
-                });
-            }
-        })
-    }
- </script>
+            }, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc":""
+        },
+        "columnDefs": [
+            { className: 'text-center', targets: [0,1,2,3,4,5,6,7]},
+            // { width: 15, targets: [3,4,5,6,7,8] },
+            // { width: 80, targets: 1 },
+        ],
+        "columns":[
+            {"data": "pedido"},
+            {"data": "comanda"},
+            {"data": "nome"},
+            {"data": "status"},
+            {"data": "titulo"},
+            {"data": "hora"},
+            {"data": "valor"},
+            {"data": "btn"},
+        ]
+    }); 
 
+});
+
+</script>
 
 
  <?php 

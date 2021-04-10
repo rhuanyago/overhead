@@ -152,11 +152,6 @@ $(document).ready(function() {
             }, //enviamos opcion 4 para que haga un SELECT
             "dataSrc":""
         },
-        "columnDefs": [
-            { className: 'text-center', targets: [0,1,2,3,4,5,6]},
-            // { width: 15, targets: [3,4,5,6,7,8] },
-            // { width: 80, targets: 1 },
-        ],
         "columns":[
             {"data": "nome"},
             {"data": "email"},
@@ -260,7 +255,7 @@ $(document).ready(function() {
                 success:function(r){
                     if(r==1){
                         alertify.success("Usuário excluido com sucesso!!");
-                        tabelaUsers.ajax.reload(null, false);
+                        gerarDadosUP();
                     }else{
                         alertify.error("Não foi possivel Excluir esse Usuário!");
                     }
@@ -273,9 +268,9 @@ $(document).ready(function() {
     });
 
 
+
+
 });
-
-
 </script>
 
 <?php include 'footer_layout.php';  ?>

@@ -192,8 +192,18 @@ if ($parametrotela == 'consultarCliente') {
             $btnDel .= "<span class='btn btn-danger text-white disabled' ><i class='far fa-trash-alt'></i></span>";   
         }
 
-        $arr[] = [$reg,$nome,$rg,$telefone,$dtnascimento,$habilitado,$btnDel]; //Ordem dos Registros na Datatable
+        // $arr[] = [$reg,$nome,$rg,$telefone,$dtnascimento,$habilitado,$btnDel]; //Ordem dos Registros na Datatable
         
+        $arr[] = [
+            'reg' => $reg,
+            'nome' => $nome,
+            'rg' => $rg,
+            'telefone' => $telefone,
+            'dt_nascimento' => $dtnascimento,
+            'habilitado'=> $habilitado,
+            'btn' => $btnDel]; //Ordem dos Registros na Datatable
+
+
     }
 
     echo json_encode($arr);
@@ -228,7 +238,20 @@ if ($parametrotela == 'ultimosPedidos') {
     $btn .= "<a class='btn btn-dark text-white text-center' title='Verificar Pedido' href='pedido_itens.php?idpedido=".$idpedido."'><i class='fas fa-pencil-alt'></i></a>";
     $btn .= "<a class='btn btn-danger text-white text-center' title='Excluir Pedido' id='btnExcluirPedidos' data-idpedido='".$idpedido."' data-idcomanda='".$comanda."'><i class='far fa-trash-alt'></i></a>";
 
-    $arr[] = [$idpedido, $comanda, $nome, $status, $titulo, $hora, $valor, $btn];    
+    // $arr[] = [$idpedido, $comanda, $nome, $status, $titulo, $hora, $valor, $btn];    
+
+    $arr[] = [
+        'pedido' => $idpedido, 
+        'comanda' => $comanda, 
+        'nome' => $nome, 
+        'status' => $status, 
+        'titulo' => $titulo, 
+        'hora' => $hora, 
+        'valor' => $valor, 
+        'btn' => $btn
+    ];    
+
+
 
    }
 
@@ -258,8 +281,19 @@ if ($parametrotela == 'consultarUsuario') {
         $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaUsuarios' id='btnAtualizaUsuarios' data-idusuario='".$idusuario."' data-nome='".$nome."' data-email='".$email."' data-senha'".$row['senha']."' data-senha_confirma'".$row['senha_confirma']."' data-telefone='".$telefone."' data-dt_nascimento='".$dtnascimento."' data-habilitado='".$row['habilitado']."' data-idpermissao='".$row['idpermissao']."' data-permissao='".$permissao."'><i class='fas fa-pencil-alt'></i></span>";
         $btn .= "<span class='btn btn-danger text-white' id='btnExcluirUsuario' data-idusuario='".$idusuario."' ><i class='far fa-trash-alt'></i></span>";
 
-        $arr[] = [$nome,$email,$permissao,$telefone,$dtnascimento,$habilitado,$btn]; //Posição que cria o datatable;
-    }
+        // $arr[] = [$nome,$email,$permissao,$telefone,$dtnascimento,$habilitado,$btn]; //Posição que cria o datatable;
+
+        $arr[] = [
+            'nome' => $nome,
+            'email' => $email,
+            'permissao' => $permissao,
+            'telefone' => $telefone,
+            'dtnascimento' => $dtnascimento,
+            'habilitado' => $habilitado,
+            'btn' => $btn
+        ]; //Posição que cria o datatable;
+
+    }  
 
     echo json_encode($arr);
  

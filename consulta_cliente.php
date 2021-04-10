@@ -58,6 +58,17 @@ require_once "Connections/conexao.php";
                                             </div>
                                         </div>
                                         <table class="table table-responsive-md table-hover mb-0" id="consultaCliente">
+                                            <thead>
+                                                <tr>
+                                                    <th>Reg</th>
+                                                    <th>Nome</th>
+                                                    <th>RG</th>                                
+                                                    <th>Telefone</th>  
+                                                    <th>Data de Nascimento</th>
+                                                    <th>Habilitado</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
                                         </table>
                                     </section>
                                 </div>
@@ -89,6 +100,7 @@ require_once "Connections/conexao.php";
                                     <label>Habilitado</label>
                                     <select name="habilitadoU" id="habilitadoU" class="form-control">
                                         <option value="S">Sim</option>
+                                        <option value="N">Não</option>
                                     </select>
                                 </form>
                             </div>
@@ -109,53 +121,50 @@ require_once "Connections/conexao.php";
     
     <script type="text/javascript">
 
-			$('#btnAtualizaCliente').click(function(){
-
-                var reg = document.getElementById("regU").value;
-                var nome = document.getElementById("nomeU").value;
-                var rg = document.getElementById("rgU").value;
-                var telefone = document.getElementById("telefoneU").value;
-                var dtnascimento = document.getElementById("dtnascimentoU").value;
-                var habilitado = document.getElementById("habilitadoU").value;        
-
-				$.ajax({
-					type:"POST",
-					data:{
-                        reg: reg,
-                        nome: nome,
-                        rg: rg,
-                        telefone: telefone,
-                        dtnascimento: dtnascimento,
-                        habilitado: habilitado,
-                        paramTela: 'AtualizarClientes',
-                    },
-					url:"classes/conect.php",
-					success:function(r){
-                        //alert(r);
-						if(r==1){
-							alertify.success("Cliente Atualizado com Sucesso :)");
-						}else if(r==2){
-                            alertify.error("Nao foi possível atualizar, Campos em Branco!");
-                        }else if(r==0){
-                            alertify.error("Esse RG ja esta cadastrado!");
-                        }else{
-                            alertify.error("Não foi possível atualizar as informações do Cliente!");
-                        }
-					},
-                    beforeSend: function(){
-					    $('.loading-icon').removeClass("oculto");
-                    },
-                    complete: function(){
-                        $('.loading-icon').addClass("oculto");
-                        $('#atualizaClientes').modal('hide');
-                        gerarDadosUP();
-                    }
-				});
-        });
+			
 
     </script>
     
 <script>
+    
+</script>
+
+<script type="text/javascript">
+
+
+
+</script>    
+
+
+<script>
+
+$(document).ready(function(){
+    
+    clientes = $('#consultaCliente').DataTable({  
+        "ajax":{            
+            "url": "classes/conect.php", 
+            "method": 'POST', //usamos el metodo POST
+            "data":{
+                paramTela: 'consultarCliente'    
+            }, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc":""
+        },
+        "columnDefs": [
+            { className: 'text-center', targets: [0,1,2,3,4,5,6]},
+            // { width: 15, targets: [3,4,5,6,7,8] },
+            // { width: 80, targets: 1 },
+        ],
+        "columns":[
+            {"data": 'reg' },                        
+            {"data": 'nome' } ,
+            {"data": 'rg' },                        
+            {"data": 'telefone' },    
+            {"data": 'dt_nascimento' },                        
+            {"data": 'habilitado' } ,    
+            {"data": 'btn'  }, 
+        ]
+    }); 
+
     $(document).on("click", "#btnAtualizaClientes", function () { //Função Modal Editar MAC
         var reg = $(this).attr('data-reg'); //Pegando os dados que são passados no botão
         var nome = $(this).attr('data-nome');  //Pegando os dados que são passados no botão
@@ -173,105 +182,78 @@ require_once "Connections/conexao.php";
             $('#nomeU').focus(); //pegando foco do campo MAC ao abrir
         });
     });
-</script>
 
-<script type="text/javascript">
 
-$(document).on("click", "#btnExcluirClientes", function () { //Função Modal Editar MAC
-    var reg = $(this).attr('data-reg');
-    alertify.confirm('Deseja excluir este Cliente?', function(){ 
-        $.ajax({
-            type:"POST",
-            data:{'reg': reg,
-                paramTela: 'ExcluirCliente'
-            },
-            url:"classes/conect.php",
-            success:function(r){
-                if(r==1){
-                    alertify.success("Cliente excluido com sucesso!!");
-                    gerarDadosUP();
-                }else{
-                    alertify.error("Não foi possivel Excluir esse Cliente!");
+    $('#btnAtualizaCliente').click(function(){
+
+        var reg = document.getElementById("regU").value;
+        var nome = document.getElementById("nomeU").value;
+        var rg = document.getElementById("rgU").value;
+        var telefone = document.getElementById("telefoneU").value;
+        var dtnascimento = document.getElementById("dtnascimentoU").value;
+        var habilitado = document.getElementById("habilitadoU").value;        
+
+            $.ajax({
+                type:"POST",
+                data:{
+                    reg: reg,
+                    nome: nome,
+                    rg: rg,
+                    telefone: telefone,
+                    dtnascimento: dtnascimento,
+                    habilitado: habilitado,
+                    paramTela: 'AtualizarClientes',
+                },
+                url:"classes/conect.php",
+                success:function(r){
+                    //alert(r);
+                    if(r==1){
+                        alertify.success("Cliente Atualizado com Sucesso :)");
+                        clientes.ajax.reload(null, false);
+                    }else if(r==2){
+                        alertify.error("Nao foi possível atualizar, Campos em Branco!");
+                    }else if(r==0){
+                        alertify.error("Esse RG ja esta cadastrado!");
+                    }else{
+                        alertify.error("Não foi possível atualizar as informações do Cliente!");
+                    }
+                },
+                beforeSend: function(){
+                    $('.loading-icon').removeClass("oculto");
+                },
+                complete: function(){
+                    $('.loading-icon').addClass("oculto");
+                    $('#atualizaClientes').modal('hide');                    
                 }
-            }
+            });
         });
-    }, function(){ 
-        alertify.error('Cancelado !')
+
+
+    $(document).on("click", "#btnExcluirClientes", function () { //Função Modal Editar MAC
+        var reg = $(this).attr('data-reg');
+        alertify.confirm('Deseja excluir este Cliente?', function(){ 
+            $.ajax({
+                type:"POST",
+                data:{'reg': reg,
+                    paramTela: 'ExcluirCliente'
+                },
+                url:"classes/conect.php",
+                success:function(r){
+                    if(r==1){
+                        alertify.success("Cliente excluido com sucesso!!");
+                        clientes.ajax.reload(null, false);
+                    }else{
+                        alertify.error("Não foi possivel Excluir esse Cliente!");
+                    }
+                }
+            });
+        }, function(){ 
+            alertify.error('Cancelado !')
+        });
     });
+
 });
 
-</script>    
-
-<script>
-
-var cont = 0;
-var tabela = 0;
-gerarDadosUP();
-function gerarDadosUP(){
-    //$('#loading_table2').show();  
-    $.ajax({
-        type: 'POST',
-        url: 'classes/conect.php',
-        data: {
-            paramTela: 'consultarCliente'    
-        },
-        success: function(data){  
-            //$('#loading_table2').hide();                                                                                                          
-            dados = null;
-            dados = JSON.parse(data);
-                if(cont == 0){
-                    cont++
-                }else {
-                    tabela.destroy();
-                }                    
-            // dados = [dados];
-            tabela = $('#consultaCliente').DataTable( {  
-                    "aaSorting": [[1, "asc"]],  //ordenação da 2° coluna do datatable para descendente 
-                    "bInfo" :false,         
-                    "scrollX": false, // cria o scroll no dataTable   
-                    // paging: false,     
-                    searching: true,   
-                    ordering: true,                                                          
-    				data: dados, 
-                    columns: [ //head da table direto no javascript
-                        {title: 'REG' },                        
-                        {title: 'Nome' } ,
-                        {title: 'RG' },                        
-                        {title: 'Telefone' },    
-                        {title: 'Data de Nascimento' },                        
-                        {title: 'Habilitado' } ,    
-                        {title: 'Ações'  },                                               
-                    ],
-                    language: { //PROPRIEDADES DO DATATABLE
-						"sEmptyTable": "Nenhum registro encontrado nesse período",
-						"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-						"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-						"sInfoFiltered": "(Filtrados de MAX registros)",
-						"sInfoPostFix": "",
-						"sInfoThousands": ".",
-						"sLengthMenu": "_MENU_ Resultados por página",
-						"sLoadingRecords": "Carregando...",
-						"sProcessing": "Processando...",
-						"sZeroRecords": "Nenhum registro encontrado",
-						"sSearch": "Pesquisar",
-						"oPaginate": {
-							"sNext": "Próximo",
-							"sPrevious": "Anterior",
-							"sFirst": "Primeiro",
-							"sLast": "Último"
-						},
-						"oAria": {
-							"sSortAscending": ": Ordenar colunas de forma ascendente",
-							"sSortDescending": ": Ordenar colunas de forma descendente"
-						},
-						"buttons": {
-								"copyTitle": "Copiar linhas"
-							}
-						} 				
-                } );
-            }				
-        })
-    }   
 </script>
 
 <?php include 'footer_layout.php';  ?>
