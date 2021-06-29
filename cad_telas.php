@@ -36,7 +36,7 @@ require_once "Connections/conexao.php";
 				<!-- start: page -->
 				<div class="row">
                     <div class="col-xl-12 order-1 mb-4">
-                        <section class="card card-danger">
+                        <section class="card card-primary">
                             <header class="card-header">
                                 <h2 class="card-title">Cadastro de Páginas</h2>
                             </header>

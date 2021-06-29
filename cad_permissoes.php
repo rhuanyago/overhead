@@ -37,7 +37,7 @@ require_once "Connections/conexao.php";
 				<!-- start: page -->
 				<div class="row">
                     <div class="col-xl-12">
-                        <section class="card card-danger">
+                        <section class="card card-primary">
                             <header class="card-header">
                                 <h2 class="card-title">Cadastro de Permissões</h2>
                             </header>
@@ -93,7 +93,7 @@ require_once "Connections/conexao.php";
 
                                     <div class="row">
                                         <div class="col-sm-10 text-center">
-                                            <span id="btnAdicionarPermissao" name="btnAdicionarPermissao"class="btn btn-danger mt-2 btn-txt"><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Adicionar Permissão </span>
+                                            <span id="btnAdicionarPermissao" name="btnAdicionarPermissao"class="btn btn-primary text-light mt-2 btn-txt"><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Adicionar Permissão </span>
                                             <a href="home.php" class="btn btn-dark mt-2">Voltar</a>
                                         </div>
                                     </div>

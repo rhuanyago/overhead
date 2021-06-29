@@ -37,7 +37,7 @@ require_once "Connections/conexao.php";
                 <!-- start: page -->
                 <div class="row">
                     <div class="col-md-12">
-                        <section class="card card-danger">
+                        <section class="card card-primary">
                             <header class="card-header">
                                 <h2 class="card-title">Tipo de Pedido</h2>
                             </header>

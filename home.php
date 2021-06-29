@@ -48,9 +48,9 @@ require_once "classes/class.vision.php";
          <div class="col-xl-12 order-1 mb-4">
              <section class="card">
                  <div class="text-left">
-                     <a class="btn btn-dark text-white" href="escolhe_venda.php" style="border:none;"><i
+                     <a class="btn btn-dark text-white" href="nova_venda.php" style="border:none;"><i
                              class="fas fa-plus"></i> Novo Pedido</a>
-                     <a class="btn btn-danger text-white" href="pedidos_finalizados.php" style="border:none;"><i
+                     <a class="btn btn-primary text-white" href="pedidos_finalizados.php" style="border:none;"><i
                              class="fas fa-check-circle"></i> Pedidos Finalizados</a>
                  </div>
                  <header class="card-header card-header-transparent">

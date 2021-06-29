@@ -1,5 +1,5 @@
-<?php 
-include 'menu_layout.php'; 
+<?php
+include 'menu_layout.php';
 require_once "Connections/conexao.php";
 require_once "classes/class.vision.php";
 $c = new conectar();
@@ -21,270 +21,374 @@ $rowListar = $obj->listarItens($idpedido);
 
 
 <style>
-.oculto{
-	display:none;		
-}
-/* Style para o loading dos tables */
+    .oculto {
+        display: none;
+    }
 
-.button:disabled {
+    /* Style para o loading dos tables */
+
+    .button:disabled {
         opacity: 0.5;
-      }
+    }
+
+    .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
+
+    input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+    .autocomplete-items div:hover {
+        /*when hovering an item:*/
+        background-color: #e9e9e9;
+    }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
 </style>
 
 
-			<section role="main" class="content-body">
-                <header class="page-header page-header-left-breadcrumb">
-                    <div class="right-wrapper">
-                        <ol class="breadcrumbs">
-                            <li>
-                                <a href="home.php">
-                                    <i class="fas fa-home"></i>
-                                </a>
-                            </li>
-                            <li><span>Nova Venda</span></li>
-                            <li><span>Criar Venda</span></li>
-                        </ol>
+<section role="main" class="content-body">
+    <header class="page-header page-header-left-breadcrumb">
+        <div class="right-wrapper">
+            <ol class="breadcrumbs">
+                <li>
+                    <a href="home.php">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li><span>Nova Venda</span></li>
+                <li><span>Criar Venda</span></li>
+            </ol>
 
 
-                    </div>
+        </div>
+    </header>
+
+    <!-- start: page -->
+    <div class="row">
+        <div class="col-md-12">
+            <section class="card card-primary">
+                <header class="card-header">
+                    <h2 class="card-title">Novo Pedido de Venda</h2>
                 </header>
-
-                <!-- start: page -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <section class="card card-danger">
-                            <header class="card-header">
-                                <h2 class="card-title">Novo Pedido de Venda</h2>
-                            </header>
-                            <div class="card-body">
-                                <div class="col-lg-12">
-                                    <div class="center">
-                                        <?php
-                                        if (isset($_SESSION['msg_erro_venda_excluir'])) :
-                                            ?>
-                                            <div class="alert alert-danger">
-                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                                <strong>Atenção! <?php echo $_SESSION['msg_erro_venda_excluir'] ?></strong>
-                                            </div>
-                                        <?php
-                                        endif;
-                                        unset($_SESSION['msg_erro_venda_excluir']);
-                                        ?>
-                                    </div>
+                <div class="card-body">
+                    <div class="col-lg-12">
+                        <div class="center">
+                            <?php
+                            if (isset($_SESSION['msg_erro_venda_excluir'])) :
+                            ?>
+                                <div class="alert alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <strong>Atenção! <?php echo $_SESSION['msg_erro_venda_excluir'] ?></strong>
                                 </div>
-                                <form method="POST" id="frmAdicionarProdutos" action="form_pagamento.php" >
-                                    <div class="row">
-                                        <div class="col-sm-1">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Pedido</label>
-                                                <input type="text" name="idpedido" id="idpedido" value="<?php echo $idpedido; ?>" class="form-control" readonly />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Tipo</label>
-                                                <input type="text" name="tipo" value="Venda" class="form-control" readonly />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Categoria</label>
-                                                <select name="categoria" id="categoria" class="form-control">
-                                                    <option selected>Selecione a Categoria</option>
-                                                    <?php foreach ($listarCat as $key) { ?>
-                                                       <option value="<?php echo $key['idcategoria'] ?>"><?php echo $key['nome']  ?></option>                                                       
-                                                    <?php  }  ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Produtos</label>
-                                                <select name="produtos" id="produtos" class="form-control">
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    </div> <!-- fim row-->
-
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Referência</label>
-                                                <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Preço</label>
-                                                <input type="number" name="preco" id="preco" class="form-control text-weight-bold text-danger" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Qtde</label>
-                                                <div data-plugin-spinner >
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <button type="button" class="btn btn-default spinner-up">
-                                                                <i class="fas fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                        <input type="number" name="qtde" id="qtde" min="1" max="200" class="spinner-input form-control" maxlength="2" readonly>
-                                                        <div class="input-group-append">
-                                                            <button type="button" class="btn btn-default spinner-down">
-                                                                <i class="fas fa-minus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Descrição</label>
-                                                <input type="text" name="descricao" id="descricao" class="form-control text-weight-bold" readonly>
-                                            </div>
-                                        </div>
-                                    </div> <!-- fim row -->
-
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label class="control-label  text-weight-bold">Incluir</label>
-                                                <input id="AdicionarProduto" class="btn btn-dark btn-block" value="Adicionar Produto" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <br />
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md table-hover mb-0">
-                                                    <div class="scrollable visible-slider colored-slider" data-plugin-scrollable">
-                                                        <div class="scrollable-content">
-                                                            <thead>
-
-                                                                <tr>
-                                                                    <th>Referência</th>
-                                                                    <th>Descrição</th>
-                                                                    <th class="text-center">Qtde</th>
-                                                                    <th class="text-center">Preço Unit.</th>
-                                                                    <th class="text-center">Preço Bruto</th>
-                                                                    <th class="text-center">Opção</th>
-                                                                </tr>
-
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php
-                                                                $resultado = 0;
-                                                                $qtde = 0;
-                                                                ?>
-                                                                <?php foreach ($rowListar as $key => $row) { ?>
-                                                                    <tr style="font-size:14px;">
-                                                                        <td><?php echo $row['referencia'] ?></td>
-                                                                        <td><?php echo $row['descricao'] ?></td>
-                                                                        <td class="text-center"><?php echo $row['quantidade'] ?></td>
-                                                                        <td class="text-center"><?php echo $row['valor'];?></td>
-                                                                        <td class="text-center"><?php echo $row['bruto'];?></td>
-                                                                        <td class="actions-hover actions-fade text-center "><?php echo $row['btn']  ?></td>
-                                                                    </tr>
-                                                                <?php
-                                                                    $valor = str_replace (',', '.', str_replace ('.', '', $row['valor']));
-                                                                    $qtde = $qtde + $row['quantidade'];
-                                                                    $multi = $valor * $row['quantidade'];
-                                                                    $resultado = $resultado + $multi;
-                                                                }
-                                                                
-                                                                ?>
-                                                                <tr style="font-size:16px;">
-                                                                    <td></td>
-                                                                    <td class="text-right" style="color:red"><b>Total<b></td>
-                                                                    <td class="text-center"><b><?php echo $qtde; ?><b></td>
-                                                                    <td class="text-center"><b><?php echo number_format($resultado, 2, ",", "."); ?><b></td>
-                                                                    <td></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <br>
-                                                        <!-- <a href="form_pagamento.php?idpedido=<?php echo $idpedido ?>" class="btn btn-danger btn-block">Formas de Pagamento</a><br> -->
-                                                        <button type="submit" class="btn btn-danger btn-block">Formas de Pagamento</button><br>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </div>
-                                            </form>
-                                            <footer class="card-footer">
-                                            </footer>
-                                        </section>
-                                    </div>
-                            </div>
-                            </form>
-                            <!-- Modal -->
-                            <div class="modal fade" id="AtualizaItens" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog modal-md" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel">Atualizar Produto</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="frmProdutoU">
-                                                <input type="text" hidden="" id="idprodutoU" name="idprodutoU">
-                                                <input type="text" hidden="" id="idpedidoU" name="idpedidoU">
-                                                <label>Descrição</label>
-                                                <input autocomplete="off" name="descricaoU" id="descricaoU"  class="form-control input-sm" maxlength="8" readonly="readonly" >
-                                                <label>Referencia</label>
-                                                <input autocomplete="off" inputmode="numeric" name="referenciaU" id="referenciaU"  class="form-control input-sm" maxlength="8" readonly="readonly" >
-                                                <label>Quantidade</label>
-                                                <input autocomplete="off" inputmode="numeric" type="number" name="qtdeU" id="qtdeU" min="1" max="100" class="form-control input-sm" maxlength="2" >
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <span id="btnAtualizaQuantidade" name="btnAtualizaQuantidade" class="btn btn-success" ><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Atualizar</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                                                          
-                            <footer class="card-footer">
-                            </footer>
-                        </section>
+                            <?php
+                            endif;
+                            unset($_SESSION['msg_erro_venda_excluir']);
+                            ?>
+                        </div>
                     </div>
+                    <form method="POST" id="frmAdicionarProdutos" action="form_pagamento.php">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Pedido</label>
+                                    <input type="text" name="idpedido" id="idpedido" value="<?php echo $idpedido; ?>" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Tipo</label>
+                                    <input type="text" name="tipo" value="Venda" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Categoria</label>
+                                    <select name="categoria" id="categoria" class="form-control">
+                                        <option selected>Selecione a Categoria</option>
+                                        <?php foreach ($listarCat as $key) { ?>
+                                            <option value="<?php echo $key['idcategoria'] ?>"><?php echo $key['nome']  ?></option>
+                                        <?php  }  ?>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <!-- <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Produtos</label>
+                                    <select name="produtos" id="produtos" class="form-control">
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Estoque</label>
+                                    <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly>
+                                </div>
+                            </div>
+
+                        </div> <!-- fim row-->
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group autocomplete" style="width:300px;">
+                                    <label class=" control-label text-weight-bold">Referência</label>
+                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Preço</label>
+                                    <input type="number" name="preco" id="preco" class="form-control text-weight-bold text-danger" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Qtde</label>
+                                    <div data-plugin-spinner>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-default spinner-up">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="number" name="qtde" id="qtde" min="1" max="200" class="spinner-input form-control" maxlength="2" readonly>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-default spinner-down">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Descrição</label>
+                                    <input type="text" name="descricao" id="descricao" class="form-control text-weight-bold" readonly>
+                                </div>
+                            </div>
+                        </div> <!-- fim row -->
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Incluir</label>
+                                    <button id="AdicionarProduto" type="button" class="btn btn-dark btn-block" value=""><i class="fas fa-plus"></i> Adicionar Produto</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <br />
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md table-hover mb-0">
+                                        <div class="scrollable visible-slider colored-slider" data-plugin-scrollable">
+                                            <div class="scrollable-content">
+                                                <thead>
+
+                                                    <tr>
+                                                        <th>Referência</th>
+                                                        <th>Descrição</th>
+                                                        <th class="text-center">Qtde</th>
+                                                        <th class="text-center">Preço Unit.</th>
+                                                        <th class="text-center">Preço Bruto</th>
+                                                        <th class="text-center">Opção</th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $resultado = 0;
+                                                    $qtde = 0;
+                                                    ?>
+                                                    <?php foreach ($rowListar as $key => $row) { ?>
+                                                        <tr style="font-size:14px;">
+                                                            <td><?php echo $row['referencia'] ?></td>
+                                                            <td><?php echo $row['descricao'] ?></td>
+                                                            <td class="text-center"><?php echo $row['quantidade'] ?></td>
+                                                            <td class="text-center"><?php echo $row['valor']; ?></td>
+                                                            <td class="text-center"><?php echo $row['bruto']; ?></td>
+                                                            <td class="actions-hover actions-fade text-center "><?php echo $row['btn']  ?></td>
+                                                        </tr>
+                                                    <?php
+                                                        $valor = str_replace(',', '.', str_replace('.', '', $row['valor']));
+                                                        $qtde = $qtde + $row['quantidade'];
+                                                        $multi = $valor * $row['quantidade'];
+                                                        $resultado = $resultado + $multi;
+                                                    }
+
+                                                    ?>
+                                                    <tr style="font-size:16px;">
+                                                        <td></td>
+                                                        <td class="text-right" style="color:red"><b>Total<b></td>
+                                                        <td class="text-center"><b><?php echo $qtde; ?><b></td>
+                                                        <td class="text-center"><b><?php echo number_format($resultado, 2, ",", "."); ?><b></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <br>
+                                    <!-- <a href="form_pagamento.php?idpedido=<?php echo $idpedido ?>" class="btn btn-danger btn-block">Formas de Pagamento</a><br> -->
+                                    <button type="submit" class="btn btn-primary btn-block text-light">Formas de Pagamento</button><br>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </form>
+                <footer class="card-footer">
+                </footer>
             </section>
-		</div>
+        </div>
+    </div>
+    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="AtualizaItens" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Atualizar Produto</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmProdutoU">
+                        <input type="text" hidden="" id="idprodutoU" name="idprodutoU">
+                        <input type="text" hidden="" id="idpedidoU" name="idpedidoU">
+                        <label>Descrição</label>
+                        <input autocomplete="off" name="descricaoU" id="descricaoU" class="form-control input-sm" maxlength="8" readonly="readonly">
+                        <label>Referencia</label>
+                        <input autocomplete="off" inputmode="numeric" name="referenciaU" id="referenciaU" class="form-control input-sm" maxlength="8" readonly="readonly">
+                        <label>Quantidade</label>
+                        <input autocomplete="off" inputmode="numeric" type="number" name="qtdeU" id="qtdeU" min="1" max="100" class="form-control input-sm" maxlength="2">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <span id="btnAtualizaQuantidade" name="btnAtualizaQuantidade" class="btn btn-success"><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Atualizar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="card-footer">
+    </footer>
+</section>
+</div>
+</section>
+</div>
 
 
-    </section>
+</section>
 
-    <script>
-    $(document).ready(function(){
-            $('#categoria').change(function(){
+<script>
+    $(document).ready(function() {
+
+        var MIN_LENGTH = 2;
+
+        $('#referencia').keyup(function() {
+
+            var referencia = $('#referencia').val();
+
+            if (referencia.length >= MIN_LENGTH) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'classes/conect.php',
+                    data: {
+                        referencia: referencia,
+                        paramTela: 'pegarProdReferencia',
+                    },
+                    dataType: "json",
+                    success: function(msg) {
+                        console.log(msg);
+                        var availableTags = msg;
+                        $("#referencia").autocomplete({
+                            source: availableTags
+                        });
+                    }
+
+                });
+            }
+        });
+
+        $("#referencia").autocomplete({
+            source: function(request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                $.ajax({
+                    url: "classes/conect.php",
+                    data: {
+                        referencia: referencia,
+                        paramTela: 'pegarProdReferencia',
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        response($.map(data, function(v, i) {
+                            var text = v.MainName;
+                            if (text && (!request.term || matcher.test(text))) {
+                                return {
+                                    label: v.MainName,
+                                    value: v.MainItemID
+                                };
+                            }
+                        }));
+                    }
+                });
+            }
+        });
+
+        $('#categoria').change(function() {
             var idcategoria = $('#categoria').val();
             //alert(idcategoria);
-                $.ajax({
-                    type:"POST",
-                    data:{
+            $.ajax({
+                type: "POST",
+                data: {
                     idcategoria: idcategoria,
                     paramTela: 'pegarProdutos',
-                    },
-                    //url:"pega_produto.php",
-                    url:"classes/conect.php",
-                    dataType: "json",
-                    success: function(json){
-                        $("#produtos").html(json);
-                    }
-                    
-                });
-            })
+                },
+                //url:"pega_produto.php",
+                url: "classes/conect.php",
+                dataType: "json",
+                success: function(json) {
+                    $("#produtos").html(json);
+                }
 
-            $('#produtos').change(function() {
+            });
+        })
+
+        $('#produtos').change(function() {
             var produtos = $('select#produtos').val();
             //alert('Chamei');
             $.ajax({
@@ -301,21 +405,22 @@ $rowListar = $obj->listarItens($idpedido);
                     var referencia = result["referencia"];
                     var preco = result["preco"];
                     var descricao = result["descricao"];
+                    var estoque = result["estoque"];
 
                     $("#referencia").val(referencia);
                     $("#preco").val(preco);
                     $("#descricao").val(descricao);
                     $("#qtde").val("1");
+                    $("#estoque").val(estoque);
                 }
             });
         });
     })
-    </script>
-    
-    
-    <script type="text/javascript">
+</script>
 
-    $('#AdicionarProduto').click(function(){
+
+<script type="text/javascript">
+    $('#AdicionarProduto').click(function() {
 
         var idpedido = document.getElementById("idpedido").value;
         var referencia = document.getElementById("referencia").value;
@@ -325,8 +430,8 @@ $rowListar = $obj->listarItens($idpedido);
         //dados=$('#frmCategoriaU').serialize();                
 
         $.ajax({
-            type:"POST",
-            data:{
+            type: "POST",
+            data: {
                 idpedido: idpedido,
                 referencia: referencia,
                 preco: preco,
@@ -334,70 +439,67 @@ $rowListar = $obj->listarItens($idpedido);
                 descricao: descricao,
                 paramTela: 'adicionarProduto',
             },
-            url:"classes/conect.php",
-            success:function(r){
+            url: "classes/conect.php",
+            success: function(r) {
                 //alert(r);
-                if(r==1){
+                if (r == 1) {
                     alertify.success("Produto inserido com Sucesso :)");
                     //$ ('#frmAdicionarProdutos').trigger ("reset");
-                   // $("#produtos").selectedIndex = -1;
+                    // $("#produtos").selectedIndex = -1;
                     $('#referencia').val("");
                     $('#preco').val("");
                     $('#descricao').val("");
-                    jQuery('#categoria').prop('selectedIndex',0);
-                    jQuery('#produtos').prop('selectedIndex',0);
-                    jQuery('#qtde').prop('value',1);
+                    jQuery('#categoria').prop('selectedIndex', 0);
+                    jQuery('#produtos').prop('selectedIndex', 0);
+                    jQuery('#qtde').prop('value', 1);
                     window.location.reload(true);
-                }else{
-                    alertify.error("Não foi possível inserir o produto !"); 
+                } else {
+                    alertify.error("Não foi possível inserir o produto !");
                 }
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('.loading-icon').removeClass("oculto");
             },
-            complete: function(){
+            complete: function() {
                 $('.loading-icon').addClass("oculto");
                 gerarDadosUP();
             }
         });
     });
+</script>
 
-    </script>
 
-    
 
 <script type="text/javascript">
-
-$(document).on("click", "#btnExcluirItem", function () { //Função Modal Editar MAC
-    var idpedido = document.getElementById("idpedido").value;
-    var iditem = $(this).attr('data-iditem');
-    alertify.confirm('Deseja excluir este Item?', function(){ 
-        $.ajax({
-            type:"POST",
-            data:{'idpedido': idpedido,
-                'iditem': iditem,
-                paramTela: 'ExcluirItem'
-            },
-            url:"classes/conect.php",
-            success:function(r){
-                if(r==1){
-                    alertify.success("Item excluido com sucesso!!");
-                    window.location.reload(true);
-                }else{
-                    alertify.error("Não foi possivel Excluir esse Item!");
+    $(document).on("click", "#btnExcluirItem", function() { //Função Modal Editar MAC
+        var idpedido = document.getElementById("idpedido").value;
+        var iditem = $(this).attr('data-iditem');
+        alertify.confirm('Deseja excluir este Item?', function() {
+            $.ajax({
+                type: "POST",
+                data: {
+                    'idpedido': idpedido,
+                    'iditem': iditem,
+                    paramTela: 'ExcluirItem'
+                },
+                url: "classes/conect.php",
+                success: function(r) {
+                    if (r == 1) {
+                        alertify.success("Item excluido com sucesso!!");
+                        window.location.reload(true);
+                    } else {
+                        alertify.error("Não foi possivel Excluir esse Item!");
+                    }
                 }
-            }
+            });
+        }, function() {
+            alertify.error('Cancelado !')
         });
-    }, function(){ 
-        alertify.error('Cancelado !')
     });
-});
-
-</script>    
+</script>
 
 <script type="text/javascript">
-
-    $('#btnAtualizaQuantidade').click(function(){
+    $('#btnAtualizaQuantidade').click(function() {
         var idpedido = document.getElementById("idpedido").value;
         var iditem = document.getElementById("idprodutoU").value;
         var descricao = document.getElementById("descricaoU").value;
@@ -406,8 +508,8 @@ $(document).on("click", "#btnExcluirItem", function () { //Função Modal Editar
         //dados=$('#frmCategoriaU').serialize();                
 
         $.ajax({
-            type:"POST",
-            data:{
+            type: "POST",
+            data: {
                 iditem: iditem,
                 idpedido: idpedido,
                 descricao: descricao,
@@ -415,43 +517,42 @@ $(document).on("click", "#btnExcluirItem", function () { //Função Modal Editar
                 qtde: qtde,
                 paramTela: 'atualizarQuantidade',
             },
-            url:"classes/conect.php",
-            success:function(r){
+            url: "classes/conect.php",
+            success: function(r) {
                 //alert(r);
-                if(r==1){
+                if (r == 1) {
                     alertify.success("Produto Atualizado com Sucesso :)");
                     $('#AtualizaItens').modal('hide');
                     window.location.reload(true);
-                }else{
+                } else {
                     alertify.error("Não foi possível atualizar as informações do Produto!");
                 }
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('.loading-icon').removeClass("oculto");
             },
-            complete: function(){
+            complete: function() {
                 $('.loading-icon').addClass("oculto");
             }
         });
     });
+</script>
 
-    </script>
-    
-    <script>
-        $(document).on("click", "#btnAtualizaItens", function () { //Função Modal Editar 
-            var idproduto = $(this).attr('data-iditem'); 
-            var descricao = $(this).attr('data-descricao'); 
-            var referencia = $(this).attr('data-referencia');  //Pegando os dados que são passados no botão
-            var qtde = $(this).attr('data-qtde'); 
-            $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
-            $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
-            $(".modal-body #referenciaU").val(referencia);
-            $(".modal-body #qtdeU").val(qtde);
-            $('#atualizaProdutos').on('shown.bs.modal', function () {
-                $('#qtdeU').focus(); //pegando foco do campo MAC ao abrir
-            });
+<script>
+    $(document).on("click", "#btnAtualizaItens", function() { //Função Modal Editar 
+        var idproduto = $(this).attr('data-iditem');
+        var descricao = $(this).attr('data-descricao');
+        var referencia = $(this).attr('data-referencia'); //Pegando os dados que são passados no botão
+        var qtde = $(this).attr('data-qtde');
+        $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+        $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+        $(".modal-body #referenciaU").val(referencia);
+        $(".modal-body #qtdeU").val(qtde);
+        $('#atualizaProdutos').on('shown.bs.modal', function() {
+            $('#qtdeU').focus(); //pegando foco do campo MAC ao abrir
         });
-    </script>
+    });
+</script>
 
 <!-- <script>
 
@@ -536,7 +637,111 @@ function gerarDadosUP(){
         })
     } 
 </script> -->
+<!-- 
+<script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function(e) {
+            var a, b, i, val = this.value;
+            closeAllLists();
+            if (!val) {
+                return false;
+            }
+            currentFocus = -1;
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function(e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
 
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
 
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function(e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks & Caicos", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("myInput"), countries);
+</script> -->
 
 <?php include 'footer_layout.php';  ?>

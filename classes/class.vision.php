@@ -324,7 +324,7 @@ class vision{
 
     }
 
-    public function adicionarProdutos($categoria, $nome, $referencia, $preco, $habilitado){
+    public function adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado){
 
         //$c = new conectar();
         //$conexao = $c->conexao();
@@ -337,14 +337,12 @@ class vision{
         $sql = $this->conexao->query($sql);
         $row = $sql->num_rows;
 
-        
-
         if ($row >= 1) {
             return 0;
         }elseif ($categoria == "ND") {
             return 2;
         }else {
-            $sql = "INSERT INTO tbproduto (referencia, idcategoria, preco, descricao, habilitado, usuid) VALUES ('$referencia', '$categoria', '$preco', '$nome', '$habilitado', '$usuid')";
+            $sql = "INSERT INTO tbproduto (referencia, idcategoria, preco, descricao, habilitado, estoque, usuid) VALUES ('$referencia', '$categoria', '$preco', '$nome', '$habilitado', '$estoque','$usuid')";
         
             return $this->conexao->query($sql);
         }
@@ -493,6 +491,7 @@ class vision{
             $idcategoria = $row['idcategoria'];
             $preco = $row['preco'];
             $descricao = $row['descricao'];
+            $estoque = $row['estoque'];
             $habilitado = $row['habilitado'];
 
             $dado = array();
@@ -502,6 +501,7 @@ class vision{
             $dado['referencia'] = $referencia;
             $dado['descricao'] = $descricao;
             $dado['preco'] = $preco;
+            $dado['estoque'] = $estoque;
             $dado['habilitado'] = $habilitado;
             $dados[] = $dado;
         }
@@ -511,7 +511,7 @@ class vision{
     }
 
 
-    public function atualizarProdutos($idproduto, $idcategoria, $descricao, $referencia, $preco, $habilitado){
+    public function atualizarProdutos($idproduto, $idcategoria, $descricao, $referencia, $preco, $estoque, $habilitado){
         //$c = new conectar();
         //$conexao = $c->conexao();
 
@@ -523,7 +523,7 @@ class vision{
             return 0;
         }else{
 
-       $sql = "UPDATE tbproduto SET referencia = '$referencia', idcategoria = '$idcategoria', preco = '$preco', descricao = '$descricao', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE id = '$idproduto'  ";
+       $sql = "UPDATE tbproduto SET referencia = '$referencia', idcategoria = '$idcategoria', preco = '$preco', descricao = '$descricao', habilitado = '$habilitado', estoque = '$estoque', modificado = NOW(), usuid = '$usuid' WHERE id = '$idproduto'  ";
 
         echo $this->conexao->query($sql);
         }
@@ -598,25 +598,47 @@ class vision{
             $data[] = $option;
         }
 
-    echo json_encode($data);
+        echo json_encode($data);
 
+    }
+
+    public function pegarProdReferencia($referencia)
+    {
+        //$c = new conectar();
+        //$conexao = $c->conexao();
+
+        $sql = "SELECT * from tbproduto where referencia like '%$referencia%' and habilitado = 'S'";
+        $sql = $this->conexao->query($sql);
+
+        $result = [];
+        while ($row = $sql->fetch_array()) {
+            $result[] = [ 
+                $row['descricao'],
+                // 'preco' => $row['preco'],
+                // 'estoque' => $row['estoque'],
+            ];
+        }
+
+        echo json_encode($result);
     }
 
     public function pegaDescProdutos($referencia){
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.referencia,c.descricao,c.preco,c.habilitado FROM tbproduto c where c.referencia = '$referencia' and c.habilitado = 'S'";
+        $sql = "SELECT c.referencia,c.descricao,c.preco,c.habilitado,c.estoque FROM tbproduto c where c.referencia = '$referencia' and c.habilitado = 'S'";
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_array();
 
         $preco = $row['preco'];
         $descricao = $row['descricao'];
+        $estoque = $row['estoque'];
 
         $ar = array(
             'referencia'=>$referencia,
             'preco'=>$preco,
-            'descricao'=>$descricao
+            'descricao'=>$descricao,
+            'estoque' => $estoque,
         );
         
 
@@ -789,15 +811,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT count(*) as total FROM tbpermissao WHERE permissao = '$permissao' ";
-        $sql = $this->conexao->query($sql);
-        $row = $sql->fetch_assoc();
-
-        if ($row['total'] >= 1) {
-            return 0;
-        }else {
-            $sql = "INSERT INTO tbpermissao (permissao, habilitado) VALUES ('$permissao','$habilitado') ";
-        }
+        $sql = "INSERT INTO tbpermissao (permissao, habilitado) VALUES ('$permissao','$habilitado') ";      
 
         return $this->conexao->query($sql);
 
@@ -1094,8 +1108,9 @@ class vision{
 
         $sql = "SELECT * from tbcategorias order by idcategoria";
         $result3 = $this->conexao->query($sql);
+        $arr = [];
         while ($rows_rscat = $result3->fetch_assoc()) { 
-            $option = '<option value="'.$rows_rscat['idcategoria'].'">'.$rows_rscat['idcategoria'].' - '.$rows_rscat['nome'].'</option>';
+            $option = '<option value="'.$rows_rscat['idcategoria'].'">'.$rows_rscat['nome'].'</option>';
             $arr[] = $option;
         } 
 

@@ -157,9 +157,10 @@ if ($parametrotela == 'adicionarProdutos') {
     $nome = $_POST['nome'];
     $referencia = $_POST['referencia'];
     $preco = $_POST['preco'];
+    $estoque = $_POST['estoque'];
     $habilitado = $_POST['habilitado'];
 
-    echo $obj->adicionarProdutos($categoria, $nome, $referencia, $preco, $habilitado);
+    echo $obj->adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado);
 }
 
 if ($parametrotela == 'consultarCliente') {
@@ -328,7 +329,8 @@ if ($parametrotela == 'consultarUsuario') {
  if ($parametrotela == 'consultarProdutos') {
      $obj = new vision();
      $result = $obj->consultarProdutos();
-     
+
+     $arr = [];
      foreach ($result as $key => $row){
         $idproduto = $row['idproduto'];
         $idcategoria = $row['idcategoria'];
@@ -336,18 +338,21 @@ if ($parametrotela == 'consultarUsuario') {
         $referencia = $row['referencia'];
         $descricao = $row['descricao'];
         $preco = $row['preco'];
+        $estoque = $row['estoque'];
         $habilitado = $row['habilitado'];
         if ($habilitado == "S") {
             $habilitado = ' <span class="badge badge-success text-center">Sim</span>';
         }else{
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
-        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco."' data-habilitado='".$row['habilitado']."'><i class='fas fa-pencil-alt'></i></span>";
+        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']."'><i class='fas fa-pencil-alt'></i></span>";
         $btn .= "<span class='btn btn-danger text-white' id='btnExcluirProdutos' data-idproduto='".$idproduto."' data-referencia='".$referencia."' ><i class='far fa-trash-alt'></i></span>";
 
-        $arr[] = [$nome, $referencia, $descricao, $preco, $habilitado, $btn];
+        $arr[] = [$nome, $referencia, $descricao, $preco, $estoque,$habilitado, $btn];
+
 
      }
+     
 
      echo json_encode($arr);
      
@@ -361,9 +366,10 @@ if ($parametrotela == 'consultarUsuario') {
     $descricao = $_POST['descricao'];
     $referencia = $_POST['referencia'];
     $preco = $_POST['preco'];
+    $estoque = $_POST['estoque'];
     $habilitado = $_POST['habilitado'];
 
-    echo $obj->atualizarProdutos($idproduto, $idcategoria, $descricao, $referencia, $preco, $habilitado);
+    echo $obj->atualizarProdutos($idproduto, $idcategoria, $descricao, $referencia, $preco, $estoque, $habilitado);
 
  }
 
@@ -402,6 +408,14 @@ if ($parametrotela == 'consultarUsuario') {
 
    echo $obj->pegaDescProdutos($referencia);
 
+}
+
+if ($parametrotela == "pegarProdReferencia") {
+    $obj = new vision();
+
+    $referencia = $_POST['referencia'];
+
+    echo $obj->pegarProdReferencia($referencia);
 }
 
 if ($parametrotela == "listarItens") {

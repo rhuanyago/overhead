@@ -52,7 +52,7 @@ while($r = $sql->fetch_assoc()){
 				<!-- start: page -->
 				<div class="row">
                     <div class="col-xl-12 order-1 mb-4">
-                        <section class="card card-danger">
+                        <section class="card card-primary">
                             <header class="card-header">
                                 <h2 class="card-title">Permissões <?php echo $row['permissao'];?></h2>
                                 <input type="hidden" name="idpermissao" id="idpermissao" value="<?php echo $idpaginas;?>" > </h2>
