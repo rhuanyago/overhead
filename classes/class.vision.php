@@ -609,6 +609,7 @@ class vision{
 
         $sql = "SELECT * from tbproduto where referencia like '%$referencia%' and habilitado = 'S'";
         $sql = $this->conexao->query($sql);
+        $row = $sql->num_rows;
 
         $result = [];
         while ($row = $sql->fetch_array()) {
@@ -651,7 +652,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.* from tbproduto b, tbpedidos_item c where b.descricao = c.descricao and c.idpedido = '$idpedido' and b.habilitado='S' order by iditem ";
+        $sql = "SELECT c.*, b.preco from tbproduto b, tbpedidos_item c where b.descricao = c.descricao and c.idpedido = '$idpedido' and b.habilitado='S' order by iditem ";
 
         $sql = $this->conexao->query($sql);
         $dados = array();
@@ -663,8 +664,8 @@ class vision{
             $referencia = $row['referencia'];
             $descricao = $row['descricao'];
             $quantidade = $row['quantidade'];
-            $preco = $row['valor'];
-            $bruto = $preco * $quantidade;
+            $preco = $row['preco'];
+            $bruto = $row['valor'];
             $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#AtualizaItens' title='Editar' id='btnAtualizaItens' data-iditem='".$iditem."' data-descricao='".$descricao."' data-referencia='".$referencia."' data-qtde='".$quantidade."'><i class='fas fa-pencil-alt'></i></span>";
             $btn .= "<span class='btn btn-danger text-white' id='btnExcluirItem' data-iditem='".$iditem."' ><i class='far fa-trash-alt'></i></span>";
 

@@ -118,7 +118,7 @@ $rowListar = $obj->listarItens($idpedido);
                     </div>
                     <form method="POST" id="frmAdicionarProdutos" action="form_pagamento.php">
                         <div class="row">
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     <label class="control-label  text-weight-bold">Pedido</label>
                                     <input type="text" name="idpedido" id="idpedido" value="<?php echo $idpedido; ?>" class="form-control" readonly />
@@ -128,6 +128,18 @@ $rowListar = $obj->listarItens($idpedido);
                                 <div class="form-group">
                                     <label class="control-label  text-weight-bold">Tipo</label>
                                     <input type="text" name="tipo" value="Venda" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class=" control-label text-weight-bold">Referência</label>
+                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Descrição</label>
+                                    <input type="text" name="descricao" id="descricao" class="form-control text-weight-bold" readonly>
                                 </div>
                             </div>
                             <!-- <div class="col-sm-3">
@@ -148,22 +160,10 @@ $rowListar = $obj->listarItens($idpedido);
                                     </select>
                                 </div>
                             </div> -->
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label class="control-label  text-weight-bold">Estoque</label>
-                                    <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly>
-                                </div>
-                            </div>
 
                         </div> <!-- fim row-->
 
                         <div class="row">
-                            <div class="col-sm-2">
-                                <div class="form-group autocomplete" style="width:300px;">
-                                    <label class=" control-label text-weight-bold">Referência</label>
-                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper>
-                                </div>
-                            </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label class="control-label  text-weight-bold">Preço</label>
@@ -180,9 +180,9 @@ $rowListar = $obj->listarItens($idpedido);
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </div>
-                                            <input type="number" name="qtde" id="qtde" min="1" max="200" class="spinner-input form-control" maxlength="2" readonly>
+                                            <input type="number" name="qtde" id="qtde" min="" max="" step="1" class="spinner-input form-control" maxlength="2" readonly>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-default spinner-down">
+                                                <button type="button" id="spinner" class="btn btn-default spinner-down">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
                                             </div>
@@ -190,19 +190,30 @@ $rowListar = $obj->listarItens($idpedido);
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label class="control-label  text-weight-bold">Descrição</label>
-                                    <input type="text" name="descricao" id="descricao" class="form-control text-weight-bold" readonly>
+                                    <label class="control-label  text-weight-bold">Estoque</label>
+                                    <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly>
                                 </div>
                             </div>
+
                         </div> <!-- fim row -->
 
                         <div class="row">
                             <div class="col-sm-3">
-                                <div class="form-group">
+                                <div id="addProduto" class="form-group">
                                     <label class="control-label  text-weight-bold">Incluir</label>
                                     <button id="AdicionarProduto" type="button" class="btn btn-dark btn-block" value=""><i class="fas fa-plus"></i> Adicionar Produto</button>
+                                </div>
+                            </div>
+                            <br>
+                            <div id="estoqueIndis" class="col-sm-12 oculto">
+                                <div class="center">
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque Indisponível.</strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -325,48 +336,65 @@ $rowListar = $obj->listarItens($idpedido);
             if (referencia.length >= MIN_LENGTH) {
 
                 $.ajax({
-                    type: 'POST',
-                    url: 'classes/conect.php',
+                    type: "POST",
                     data: {
                         referencia: referencia,
-                        paramTela: 'pegarProdReferencia',
+                        paramTela: 'pegarDescProdutos',
                     },
-                    dataType: "json",
-                    success: function(msg) {
-                        console.log(msg);
-                        var availableTags = msg;
-                        $("#referencia").autocomplete({
-                            source: availableTags
-                        });
-                    }
 
+                    url: "classes/conect.php",
+                    dataType: "json",
+                    success: function(result) {
+                        if (typeof result !== 'undefined') {
+                            var referencia = result["referencia"];
+                            var preco = result["preco"];
+                            var descricao = result["descricao"];
+                            var estoque = result["estoque"];
+
+                            $("#referencia").val(referencia);
+                            $("#preco").val(preco);
+                            $("#descricao").val(descricao);
+                            $("#qtde").val("1");
+                            $("#estoque").val(estoque);
+                            $("#qtde").attr({
+                                "max": estoque,
+                                "min": 0
+                            });
+                            if (estoque == 0) {
+                                var element = document.getElementById("addProduto");
+                                element.classList.add("oculto");
+                                var estoqueIndis = document.getElementById("estoqueIndis");
+                                estoqueIndis.classList.remove("oculto");
+                            }
+                        }
+                    }
                 });
             }
         });
 
-        $("#referencia").autocomplete({
-            source: function(request, response) {
-                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-                $.ajax({
-                    url: "classes/conect.php",
-                    data: {
-                        referencia: referencia,
-                        paramTela: 'pegarProdReferencia',
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        response($.map(data, function(v, i) {
-                            var text = v.MainName;
-                            if (text && (!request.term || matcher.test(text))) {
-                                return {
-                                    label: v.MainName,
-                                    value: v.MainItemID
-                                };
-                            }
-                        }));
-                    }
-                });
+        $('#referencia').keydown(function() {
+
+            var referencia = $('#referencia').val();
+
+            if (referencia.length <= 1 || referencia == '') {
+                // $("#referencia").val('');
+                $("#preco").val('');
+                $("#descricao").val('');
+                $("#qtde").val("1");
+                $("#estoque").val('');
+                var element = document.getElementById("addProduto");
+                element.classList.remove("oculto");
+                var estoqueIndis = document.getElementById("estoqueIndis");
+                estoqueIndis.classList.add("oculto");
             }
+
+        });
+
+        $("#spinner").spinner({
+            step: 1,
+            min: 1,
+            max: 10,
+            numberFormat: "n",
         });
 
         $('#categoria').change(function() {
