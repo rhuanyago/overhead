@@ -119,8 +119,8 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
 
             <!-- start: header -->
             <header class="header">
-                <div class="logo-container">
-                    <a href="home.php" class="logo"> <img src="img/logo_over.png" width="290" height="45" alt="Vision Lounge" /> </a>
+                <div class="logo-container ">
+                    <a href="home.php" class="logo"> <img src="img/logo_over.png" width="305" height="45" alt="Vision Lounge" /> </a>
                     <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened"> <i class="fas fa-bars" aria-label="Toggle sidebar"></i> </div>
                 </div>
 

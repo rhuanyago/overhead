@@ -391,7 +391,6 @@ class vision{
            $dado = array();
 
            $dado['idpedido'] = $row["idpedido"];
-           $dado['comanda'] = $row["comanda"];
            $dado['reg'] = $row["reg"];
            $dado['tipo'] = $row["tipo"];
            $dado['nome'] = $row["nome"];
@@ -652,7 +651,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.*, b.preco from tbproduto b, tbpedidos_item c where b.descricao = c.descricao and c.idpedido = '$idpedido' and b.habilitado='S' order by iditem ";
+        $sql = "SELECT c.*, b.preco, b.estoque from tbproduto b, tbpedidos_item c where b.descricao = c.descricao and c.idpedido = '$idpedido' and b.habilitado='S' order by iditem ";
 
         $sql = $this->conexao->query($sql);
         $dados = array();
@@ -665,8 +664,9 @@ class vision{
             $descricao = $row['descricao'];
             $quantidade = $row['quantidade'];
             $preco = $row['preco'];
-            $bruto = $row['valor'];
-            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#AtualizaItens' title='Editar' id='btnAtualizaItens' data-iditem='".$iditem."' data-descricao='".$descricao."' data-referencia='".$referencia."' data-qtde='".$quantidade."'><i class='fas fa-pencil-alt'></i></span>";
+            $bruto = $row['preco'] * $quantidade;
+            $estoque = $row['estoque'];
+            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#AtualizaItens' title='Editar' id='btnAtualizaItens' data-iditem='".$iditem."' data-descricao='".$descricao."' data-preco='".$preco."' data-referencia='".$referencia."' data-qtde='".$quantidade."'><i class='fas fa-pencil-alt'></i></span>";
             $btn .= "<span class='btn btn-danger text-white' id='btnExcluirItem' data-iditem='".$iditem."' ><i class='far fa-trash-alt'></i></span>";
 
             $preco = number_format($preco, 2, ",", ".");
@@ -679,6 +679,7 @@ class vision{
             $dado['quantidade'] = $quantidade;
             $dado['valor'] = $preco;
             $dado['bruto'] = $bruto;
+            $dado['estoque'] = $estoque;
             $dado['btn'] = $btn;
             $dados[] = $dado;
         }
@@ -687,16 +688,40 @@ class vision{
         
     }
 
-    public function atualizarQuantidade($idpedido, $iditem, $referencia, $quantidade){
-        //$c = new conectar();
-        //$conexao = $c->conexao();
+    function atualizaPrecoVenda($idpedido, $preco = '', $qtde = '', $type = '')
+    {
+        $itens = $this->listarItens($idpedido);
 
-        $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade' WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
+        // print_r($itens);
+       
 
-        return $this->conexao->query($sql);
+        if (!empty($itens)) {
+            $arr = [];
+            foreach ($itens as $key => $value) {
+                $valor = str_replace(",", ".", $value['bruto']);
+                array_push($arr, $value['bruto']);   
+            }
+
+            $tot = $preco * $qtde;
+
+            $resultado = array_sum($arr);
+            if($type == 'sum'){
+                $resultado = $resultado + $tot;
+            }else {
+                $resultado = $resultado - $tot;
+            }            
+
+        }else {
+            $resultado = $preco * $qtde;
+        }
+
+
+        $sqlUpdateValorTotal = "UPDATE tbpedidos SET valor='$resultado' WHERE idpedido='$idpedido'";
+        return $this->conexao->query($sqlUpdateValorTotal);
     }
 
-    public function adicionarProduto($idpedido, $referencia, $preco, $qtde, $descricao){
+    public function adicionarProduto($idpedido, $referencia, $preco, $qtde, $descricao)
+    {
         //$c = new conectar();
         //$conexao = $c->conexao();
 
@@ -708,12 +733,35 @@ class vision{
             $qtde = $row['quantidade'] + $qtde;
             $iditem = $row['iditem'];
             $sql = "UPDATE tbpedidos_item SET referencia = '$referencia', descricao = '$descricao', quantidade = '$qtde', valor = '$preco' WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
-        }else{
+        } else {
             $sql = "INSERT INTO tbpedidos_item (idpedido, referencia, descricao, quantidade, valor) VALUES ('$idpedido', '$referencia', '$descricao', '$qtde', '$preco')";
         }
 
-        return $this->conexao->query($sql);
+        $this->atualizaPrecoVenda($idpedido, $preco, $qtde, $type = 'sum');
 
+
+        return $this->conexao->query($sql);
+    }
+
+    public function atualizarQuantidade($idpedido, $iditem, $referencia, $preco, $quantidade){
+        //$c = new conectar();
+        //$conexao = $c->conexao();
+        $row = $this->listarItens($idpedido);
+        // echo $quantidade;
+        if ($row[0]['quantidade'] > $quantidade) {
+            $valor = str_replace(",", ".", $row[0]['valor']);
+            $valor = $valor * $quantidade;
+
+            $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade', valor = '$valor'  WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
+            return $this->conexao->query($sql);
+        }else {
+            $valor = str_replace(",", ".", $row[0]['valor']);
+            $valor = $valor * $quantidade;
+
+            $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade', valor = '$valor'  WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
+            return $this->conexao->query($sql);
+        }
+        
     }
 
     public function excluirItem($idpedido, $iditem){
@@ -722,7 +770,33 @@ class vision{
         
         $sql = "DELETE FROM tbpedidos_item WHERE idpedido = '$idpedido' and iditem = '$iditem' ";
 
+        // $this->atualizaPrecoVenda();
+
         return $this->conexao->query($sql);
+    }
+
+    public function excluirPedidos($idpedido)
+    {
+        //$c = new conectar();
+        //$conexao = $c->conexao();
+        $itens = $this->listarItens($idpedido);
+
+        foreach ($itens as $key => $value) {
+            $referencia = $value['referencia'];
+            $estoque = $value['estoque'] + $value['quantidade'];
+
+            $sqlUp = "UPDATE tbproduto SET estoque = '$estoque' WHERE referencia = '$referencia'";
+            $estoque_return = $this->conexao->query($sqlUp);
+        }
+
+
+        $sql1 = "UPDATE tbpedidos SET status='D' WHERE idpedido='$idpedido' ";
+
+        // $this->atualizaComanda($idcomanda);
+
+        // $this->deletaPagamento($idpedido);
+
+        return $this->conexao->query($sql1);
     }
 
     public function totalMes(){
@@ -1005,21 +1079,7 @@ class vision{
 
             return $dados;
 
-    }
-
-    public function excluirPedidos($idpedido,$idcomanda){
-        //$c = new conectar();
-        //$conexao = $c->conexao();
-
-        $sql1 = "UPDATE tbpedidos SET status='D' WHERE idpedido='$idpedido' ";        
-
-        $this->atualizaComanda($idcomanda);
-
-        $this->deletaPagamento($idpedido);
-
-        return $this->conexao->query($sql1);
-        
-    }
+    }  
 
     function atualizaComanda($idcomanda){
         //$c = new conectar();

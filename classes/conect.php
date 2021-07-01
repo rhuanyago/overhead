@@ -220,7 +220,6 @@ if ($parametrotela == 'ultimosPedidos') {
    foreach ($result as $key => $row) {
        
     $idpedido = $row['idpedido'];
-    $comanda = $row['comanda'];
     $reg = $row['reg'];
     $tipo = $row['tipo'];
     $nome = $row['nome'];
@@ -235,15 +234,14 @@ if ($parametrotela == 'ultimosPedidos') {
         $status = '<span class="badge badge-danger text-center">Fechado</span>';
     }
 
-    $btn = "<a class='btn btn-default text-center' title='Adicionar Produtos' href='cadastro_mac.php?idpedido=".$idpedido."'><i class='fas fa-plus'></i></a>";
+    $btn = "<a class='btn btn-default text-center' title='Adicionar Produtos' href='nova_venda.php?idpedido=".$idpedido."'><i class='fas fa-plus'></i></a>";
     $btn .= "<a class='btn btn-dark text-white text-center' title='Verificar Pedido' href='pedido_itens.php?idpedido=".$idpedido."'><i class='fas fa-pencil-alt'></i></a>";
-    $btn .= "<a class='btn btn-danger text-white text-center' title='Excluir Pedido' id='btnExcluirPedidos' data-idpedido='".$idpedido."' data-idcomanda='".$comanda."'><i class='far fa-trash-alt'></i></a>";
+    $btn .= "<a class='btn btn-danger text-white text-center' title='Excluir Pedido' id='btnExcluirPedidos' data-idpedido='".$idpedido."'><i class='far fa-trash-alt'></i></a>";
 
     // $arr[] = [$idpedido, $comanda, $nome, $status, $titulo, $hora, $valor, $btn];    
 
     $arr[] = [
         'pedido' => $idpedido, 
-        'comanda' => $comanda, 
         'nome' => $nome, 
         'status' => $status, 
         'titulo' => $titulo, 
@@ -432,9 +430,10 @@ if ($parametrotela == "atualizarQuantidade") {
     $idpedido = $_POST['idpedido'];
     $iditem = $_POST['iditem'];
     $referencia = $_POST['referencia'];
+    $preco = $_POST['preco'];
     $quantidade = $_POST['qtde'];
 
-    echo $obj->atualizarQuantidade($idpedido, $iditem, $referencia, $quantidade);
+    echo $obj->atualizarQuantidade($idpedido, $iditem, $referencia, $preco,$quantidade);
 }
 
 if ($parametrotela == "adicionarProduto") {
@@ -561,9 +560,9 @@ if ($parametrotela == 'ExcluirPedidos') {
     $obj = new vision();
 
     $idpedido = $_POST['idpedido'];
-    $idcomanda = $_POST['idcomanda'];
+    // $idcomanda = $_POST['idcomanda'];
     
-    echo $obj->excluirPedidos($idpedido,$idcomanda);
+    echo $obj->excluirPedidos($idpedido);
 }
 
 if ($parametrotela == 'adicionarForma') {

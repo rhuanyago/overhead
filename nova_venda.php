@@ -4,10 +4,15 @@ require_once "Connections/conexao.php";
 require_once "classes/class.vision.php";
 $c = new conectar();
 $conexao = $c->conexao();
-
 $obj = new vision();
-$result = $obj->ultimoPedido();
-$idpedido = $result['idpedido'];
+if (!isset($_GET['idpedido'])) {
+
+    $result = $obj->ultimoPedido();
+    $idpedido = $result['idpedido'];
+} else {
+    $idpedido = $_GET['idpedido'];
+}
+
 
 $listarCat = $obj->listaCategoria();
 //var_dump($listarCat);
@@ -241,6 +246,7 @@ $rowListar = $obj->listarItens($idpedido);
                                                     <?php
                                                     $resultado = 0;
                                                     $qtde = 0;
+                                                    $arr = [];
                                                     ?>
                                                     <?php foreach ($rowListar as $key => $row) { ?>
                                                         <tr style="font-size:14px;">
@@ -253,11 +259,10 @@ $rowListar = $obj->listarItens($idpedido);
                                                         </tr>
                                                     <?php
                                                         $valor = str_replace(',', '.', str_replace('.', '', $row['valor']));
+                                                        array_push($arr, $row['bruto']);                                                        
                                                         $qtde = $qtde + $row['quantidade'];
-                                                        $multi = $valor * $row['quantidade'];
-                                                        $resultado = $resultado + $multi;
                                                     }
-
+                                                    $resultado = array_sum($arr);
                                                     ?>
                                                     <tr style="font-size:16px;">
                                                         <td></td>
@@ -304,6 +309,8 @@ $rowListar = $obj->listarItens($idpedido);
                         <input autocomplete="off" name="descricaoU" id="descricaoU" class="form-control input-sm" maxlength="8" readonly="readonly">
                         <label>Referencia</label>
                         <input autocomplete="off" inputmode="numeric" name="referenciaU" id="referenciaU" class="form-control input-sm" maxlength="8" readonly="readonly">
+                        <label>Preço</label>
+                        <input autocomplete="off" inputmode="numeric" type="text" name="precoU" id="precoU" class="form-control input-sm" readonly>
                         <label>Quantidade</label>
                         <input autocomplete="off" inputmode="numeric" type="number" name="qtdeU" id="qtdeU" min="1" max="100" class="form-control input-sm" maxlength="2">
                     </form>
@@ -390,12 +397,6 @@ $rowListar = $obj->listarItens($idpedido);
 
         });
 
-        $("#spinner").spinner({
-            step: 1,
-            min: 1,
-            max: 10,
-            numberFormat: "n",
-        });
 
         $('#categoria').change(function() {
             var idcategoria = $('#categoria').val();
@@ -532,6 +533,7 @@ $rowListar = $obj->listarItens($idpedido);
         var iditem = document.getElementById("idprodutoU").value;
         var descricao = document.getElementById("descricaoU").value;
         var referencia = document.getElementById("referenciaU").value;
+        var preco = document.getElementById("precoU").value;
         var qtde = document.getElementById("qtdeU").value;
         //dados=$('#frmCategoriaU').serialize();                
 
@@ -542,6 +544,7 @@ $rowListar = $obj->listarItens($idpedido);
                 idpedido: idpedido,
                 descricao: descricao,
                 referencia: referencia,
+                preco: preco,
                 qtde: qtde,
                 paramTela: 'atualizarQuantidade',
             },
@@ -571,10 +574,12 @@ $rowListar = $obj->listarItens($idpedido);
         var idproduto = $(this).attr('data-iditem');
         var descricao = $(this).attr('data-descricao');
         var referencia = $(this).attr('data-referencia'); //Pegando os dados que são passados no botão
+        var preco = $(this).attr('data-preco'); //Pegando os dados que são passados no botão
         var qtde = $(this).attr('data-qtde');
         $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #referenciaU").val(referencia);
+        $(".modal-body #precoU").val(preco);
         $(".modal-body #qtdeU").val(qtde);
         $('#atualizaProdutos').on('shown.bs.modal', function() {
             $('#qtdeU').focus(); //pegando foco do campo MAC ao abrir
