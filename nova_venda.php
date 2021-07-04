@@ -36,47 +36,26 @@ $rowListar = $obj->listarItens($idpedido);
         opacity: 0.5;
     }
 
-    .autocomplete {
-        /*the container must be positioned relative:*/
-        position: relative;
-        display: inline-block;
+    .spinnerVal {
+        text-align: center;
     }
 
-    input {
-        border: 1px solid transparent;
-        background-color: #f1f1f1;
-        padding: 10px;
-        font-size: 16px;
+    .customSpinner {
+        display: flex;
+        margin-bottom: 10px;
     }
 
-    .autocomplete-items {
-        position: absolute;
-        border: 1px solid #d4d4d4;
-        border-bottom: none;
-        border-top: none;
-        z-index: 99;
-        /*position the autocomplete items to be the same width as the container:*/
-        top: 100%;
-        left: 0;
-        right: 0;
+
+    /*Apply individual Styles to one*/
+
+    .spinner-roundVal {
+        margin: auto 2px;
+        border-radius: 20px !important;
+        width: auto !important;
     }
 
-    .autocomplete-items div {
-        padding: 10px;
-        cursor: pointer;
-        background-color: #fff;
-        border-bottom: 1px solid #d4d4d4;
-    }
-
-    .autocomplete-items div:hover {
-        /*when hovering an item:*/
-        background-color: #e9e9e9;
-    }
-
-    .autocomplete-active {
-        /*when navigating through the items using the arrow keys:*/
-        background-color: DodgerBlue !important;
-        color: #ffffff;
+    .spinner-roundbutton {
+        border-radius: 100px !important;
     }
 </style>
 
@@ -178,19 +157,20 @@ $rowListar = $obj->listarItens($idpedido);
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label class="control-label  text-weight-bold">Qtde</label>
-                                    <div data-plugin-spinner>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <button type="button" class="btn btn-default spinner-up">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </div>
-                                            <input type="number" name="qtde" id="qtde" min="" max="" step="1" class="spinner-input form-control" maxlength="2" readonly>
-                                            <div class="input-group-append">
-                                                <button type="button" id="spinner" class="btn btn-default spinner-down">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
-                                            </div>
+                                    <!-- <input type="number" name="qtde" id="qtde" min="1" max="" step="1" class="form-control" maxlength="2"> -->
+
+                                    <!--Input Form1-->
+                                    <div class="input-group customSpinner">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-primary text-light spinnerbutton spinnerMinus spinner-roundbutton">
+                                                <span class="fa fa-minus"></span>
+                                            </button>
+                                        </div>
+                                        <input type="text" readonly value="0" name="qtde" id="qtde" data-estoque="" class="form-control spinnerVal spinner-roundVal" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary text-light spinnerbutton spinnerPlus spinner-roundbutton">
+                                                <span class="fa fa-plus"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +192,7 @@ $rowListar = $obj->listarItens($idpedido);
                                     <button id="AdicionarProduto" type="button" class="btn btn-dark btn-block" value=""><i class="fas fa-plus"></i> Adicionar Produto</button>
                                 </div>
                             </div>
-                            <br>
+                            <br><br>
                             <div id="estoqueIndis" class="col-sm-12 oculto">
                                 <div class="center">
                                     <div class="alert alert-danger">
@@ -238,7 +218,7 @@ $rowListar = $obj->listarItens($idpedido);
                                                         <th class="text-center">Qtde</th>
                                                         <th class="text-center">Preço Unit.</th>
                                                         <th class="text-center">Preço Bruto</th>
-                                                        <th class="text-center">Opção</th>
+                                                        <th class="text-center">Opções</th>
                                                     </tr>
 
                                                 </thead>
@@ -259,7 +239,7 @@ $rowListar = $obj->listarItens($idpedido);
                                                         </tr>
                                                     <?php
                                                         $valor = str_replace(',', '.', str_replace('.', '', $row['valor']));
-                                                        array_push($arr, $row['bruto']);                                                        
+                                                        array_push($arr, $row['bruto']);
                                                         $qtde = $qtde + $row['quantidade'];
                                                     }
                                                     $resultado = array_sum($arr);
@@ -312,7 +292,20 @@ $rowListar = $obj->listarItens($idpedido);
                         <label>Preço</label>
                         <input autocomplete="off" inputmode="numeric" type="text" name="precoU" id="precoU" class="form-control input-sm" readonly>
                         <label>Quantidade</label>
-                        <input autocomplete="off" inputmode="numeric" type="number" name="qtdeU" id="qtdeU" min="1" max="100" class="form-control input-sm" maxlength="2">
+                        <!-- <input autocomplete="off" inputmode="numeric" type="number" name="qtdeU" id="qtdeU" min="1" max="100" class="form-control input-sm" maxlength="2"> -->
+                        <div class="input-group customSpinner">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-primary text-light spinnerbutton spinnerMinus spinner-roundbutton">
+                                    <span class="fa fa-minus"></span>
+                                </button>
+                            </div>
+                            <input type="text" readonly name="qtdeU" id="qtdeU" class="form-control spinnerVal spinner-roundVal" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary text-light spinnerbutton spinnerPlus spinner-roundbutton">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -332,7 +325,33 @@ $rowListar = $obj->listarItens($idpedido);
 </section>
 
 <script>
+
+function teste(){
+    
+}
     $(document).ready(function() {
+
+        /* alert("ready");//Thank You Saviour */
+        var minusButton = $(".spinnerMinus"); //to aquire all minus buttons
+        var plusButton = $(".spinnerPlus"); //to aquire all plus buttons
+        //Handle click
+        minusButton.click(function() {
+            var estoque = $('#qtde').attr('data-estoque');
+
+            trigger_Spinner($(this), "-", {
+                max: 1000,
+                min: 0,
+            }); //Triggers the Spinner Actuator
+        }); /*end Handle Minus Button click*/
+
+        plusButton.click(function() {
+            // var estoque = $('#qtde').attr('data-estoque');
+
+            trigger_Spinner($(this), "+", {
+                max: 1000,
+                min: 0,
+            }); //Triggers the Spinner Actuator    
+        }); /*end Handle Plus Button Click*/
 
         var MIN_LENGTH = 2;
 
@@ -363,11 +382,10 @@ $rowListar = $obj->listarItens($idpedido);
                             $("#descricao").val(descricao);
                             $("#qtde").val("1");
                             $("#estoque").val(estoque);
-                            $("#qtde").attr({
-                                "max": estoque,
-                                "min": 0
-                            });
-                            if (estoque == 0) {
+
+                            $('#qtde').attr('data-estoque', estoque);
+
+                            if (estoque == 0 || estoque < 0) {
                                 var element = document.getElementById("addProduto");
                                 element.classList.add("oculto");
                                 var estoqueIndis = document.getElementById("estoqueIndis");
@@ -389,6 +407,7 @@ $rowListar = $obj->listarItens($idpedido);
                 $("#descricao").val('');
                 $("#qtde").val("1");
                 $("#estoque").val('');
+                $('#qtde').attr('data-estoque', '');
                 var element = document.getElementById("addProduto");
                 element.classList.remove("oculto");
                 var estoqueIndis = document.getElementById("estoqueIndis");
@@ -396,6 +415,8 @@ $rowListar = $obj->listarItens($idpedido);
             }
 
         });
+
+
 
 
         $('#categoria').change(function() {
@@ -444,7 +465,57 @@ $rowListar = $obj->listarItens($idpedido);
                 }
             });
         });
-    })
+    });
+
+    //This function will take the clicked button and actuate the spinner based on the provided function/operator
+    // - this allows you to adjust the limits of specific spinners based on classnames
+    function trigger_Spinner(clickedButton, plus_minus, limits) {
+
+        var valueElement = clickedButton.closest('.customSpinner').find('.spinnerVal'); //gets the closest value element to this button
+        var controllerbuttons = {
+            minus: clickedButton.closest('.customSpinner').find('.spinnerMinus'),
+            plus: clickedButton.closest('.customSpinner').find('.spinnerPlus')
+        }; //to get the button pair associated only with this set of input controls//THank You Jesus!
+
+        //Activate Spinner
+        updateSpinner(limits, plus_minus, valueElement, controllerbuttons); //to update the Spinner
+
+    }
+
+
+
+    /*
+    	max - maxValue
+      min - minValue
+      operator - +/-
+      elem - the element that will be used to update the count
+    */ //Thank You Jesus!
+    function updateSpinner(limits, operator, elem, buttons) {
+
+
+        var currentVal = parseInt(elem.val()); //get the current val
+
+        // console.log(currentVal);
+
+        //Operate on value -----------------
+        if (operator == "+") {
+            currentVal += 1; //Increment by one  
+            //Thank You Jesus ----------------
+            if (currentVal <= limits.max) {
+                elem.val(currentVal);
+            }
+        } else if (operator == "-") {
+            currentVal -= 1; //Decrement by one
+            //Thank You Jesus ----------------
+            if (currentVal >= limits.min) {
+                elem.val(currentVal);
+            }
+        }
+
+        //Independent Controllers - Handle Buttons disable toggle ------------------------
+        buttons.plus.prop('disabled', (currentVal >= limits.max)); //enable/disable button
+        buttons.minus.prop('disabled', (currentVal <= limits.min)); //enable/disable button  
+    }
 </script>
 
 
@@ -470,7 +541,7 @@ $rowListar = $obj->listarItens($idpedido);
             },
             url: "classes/conect.php",
             success: function(r) {
-                //alert(r);
+                // alert(r);
                 if (r == 1) {
                     alertify.success("Produto inserido com Sucesso :)");
                     //$ ('#frmAdicionarProdutos').trigger ("reset");
@@ -480,8 +551,15 @@ $rowListar = $obj->listarItens($idpedido);
                     $('#descricao').val("");
                     jQuery('#categoria').prop('selectedIndex', 0);
                     jQuery('#produtos').prop('selectedIndex', 0);
+                    $("#qtde").val("1");
                     jQuery('#qtde').prop('value', 1);
                     window.location.reload(true);
+                } else if (r == false) {
+                    var element = document.getElementById("addProduto");
+                    element.classList.add("oculto");
+                    var estoqueIndis = document.getElementById("estoqueIndis");
+                    estoqueIndis.classList.remove("oculto");
+                    jQuery('#qtde').prop('value', 1);
                 } else {
                     alertify.error("Não foi possível inserir o produto !");
                 }
@@ -491,7 +569,7 @@ $rowListar = $obj->listarItens($idpedido);
             },
             complete: function() {
                 $('.loading-icon').addClass("oculto");
-                gerarDadosUP();
+                // gerarDadosUP();
             }
         });
     });
@@ -576,6 +654,7 @@ $rowListar = $obj->listarItens($idpedido);
         var referencia = $(this).attr('data-referencia'); //Pegando os dados que são passados no botão
         var preco = $(this).attr('data-preco'); //Pegando os dados que são passados no botão
         var qtde = $(this).attr('data-qtde');
+        var estoque = $(this).attr('data-estoque');
         $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #referenciaU").val(referencia);
@@ -584,6 +663,7 @@ $rowListar = $obj->listarItens($idpedido);
         $('#atualizaProdutos').on('shown.bs.modal', function() {
             $('#qtdeU').focus(); //pegando foco do campo MAC ao abrir
         });
+
     });
 </script>
 
