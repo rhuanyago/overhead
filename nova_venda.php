@@ -282,6 +282,14 @@ $rowListar = $obj->listarItens($idpedido);
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
+                    <div id="estoqueIndisAtt" class="col-sm-12 oculto">
+                        <div class="center">
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque Indisponível.</strong>
+                            </div>
+                        </div>
+                    </div>
                     <form id="frmProdutoU">
                         <input type="text" hidden="" id="idprodutoU" name="idprodutoU">
                         <input type="text" hidden="" id="idpedidoU" name="idpedidoU">
@@ -306,6 +314,8 @@ $rowListar = $obj->listarItens($idpedido);
                                 </button>
                             </div>
                         </div>
+                        <label>Estoque</label>
+                        <input autocomplete="off" inputmode="numeric" type="text" name="estoqueU" id="estoqueU" class="form-control input-sm" readonly>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -325,10 +335,9 @@ $rowListar = $obj->listarItens($idpedido);
 </section>
 
 <script>
+    function teste() {
 
-function teste(){
-    
-}
+    }
     $(document).ready(function() {
 
         /* alert("ready");//Thank You Saviour */
@@ -633,6 +642,10 @@ function teste(){
                     alertify.success("Produto Atualizado com Sucesso :)");
                     $('#AtualizaItens').modal('hide');
                     window.location.reload(true);
+                } else if (r == false) {
+                    // $('#AtualizaItens').modal('hide');
+                    var estoqueIndis = document.getElementById("estoqueIndisAtt");
+                    estoqueIndis.classList.remove("oculto");
                 } else {
                     alertify.error("Não foi possível atualizar as informações do Produto!");
                 }
@@ -660,6 +673,7 @@ function teste(){
         $(".modal-body #referenciaU").val(referencia);
         $(".modal-body #precoU").val(preco);
         $(".modal-body #qtdeU").val(qtde);
+        $(".modal-body #estoqueU").val(estoque);
         $('#atualizaProdutos').on('shown.bs.modal', function() {
             $('#qtdeU').focus(); //pegando foco do campo MAC ao abrir
         });

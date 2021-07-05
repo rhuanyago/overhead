@@ -666,7 +666,7 @@ class vision{
             $preco = $row['preco'];
             $bruto = $row['preco'] * $quantidade;
             $estoque = $row['estoque'];
-            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#AtualizaItens' title='Editar' id='btnAtualizaItens' data-iditem='".$iditem."' data-descricao='".$descricao."' data-preco='".$preco."' data-referencia='".$referencia."' data-qtde='".$quantidade."'><i class='fas fa-pencil-alt'></i></span>";
+            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#AtualizaItens' title='Editar' id='btnAtualizaItens' data-iditem='".$iditem."' data-descricao='".$descricao."' data-preco='".$preco."' data-referencia='".$referencia."' data-qtde='".$quantidade. "' data-estoque='" . $estoque . "'><i class='fas fa-pencil-alt'></i></span>";
             $btn .= "<span class='btn btn-danger text-white' id='btnExcluirItem' data-iditem='".$iditem."' ><i class='far fa-trash-alt'></i></span>";
 
             $preco = number_format($preco, 2, ",", ".");
@@ -691,7 +691,7 @@ class vision{
     function atualizaPrecoVenda($idpedido)
     {
 
-        $sql = "SELECT sum(valor) as total_venda FROM overhead.tbpedidos_item WHERE idpedido = '$idpedido';";
+        $sql = "SELECT sum(valor) as total_venda FROM tbpedidos_item WHERE idpedido = '$idpedido';";
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
@@ -701,16 +701,29 @@ class vision{
         return $this->conexao->query($sqlUpdateValorTotal);
     }
 
-    function checkEstoque($referencia, $quantidade){
-        $sqlEstoque = "SELECT estoque FROM overhead.tbproduto WHERE referencia = '$referencia';";
+    function checkEstoque($referencia, $quantidade = ''){
+        $sqlEstoque = "SELECT estoque, quantidade FROM tbproduto c, tbpedidos_item a WHERE c.referencia = a.referencia and c.referencia = '$referencia';";
         $sqlEstoque = $this->conexao->query($sqlEstoque);
         $row = $sqlEstoque->fetch_assoc();
 
-        if($row['estoque'] >= $quantidade){
-            return true;
-        }else{
-            return false;
+        if($sqlEstoque->num_rows != 0){
+            
+            
+            $teste = $quantidade - $row['estoque'];
+            $zika = (int)$row['estoque'] + (int)$teste ;
+
+            // echo $teste . "<br>";
+            // echo $zika;
+
+            if ($zika >= $teste) {
+                return true;
+            } else if ($quantidade == $row['quantidade']) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        return true;
 
     }
 
@@ -751,19 +764,31 @@ class vision{
     public function atualizarQuantidade($idpedido, $iditem, $referencia, $preco, $quantidade){
         //$c = new conectar();
         //$conexao = $c->conexao();
+
+        $estoque = $this->checkEstoque($referencia, $quantidade);
+
+        
+        if ($estoque == false) {
+            return false;
+        }
+
+        // exit;
+
         $row = $this->listarItens($idpedido);
 
         if ($row[0]['quantidade'] > $quantidade) {
-            $valor = str_replace(",", ".", $row[0]['valor']);
-            $valor = $valor * $quantidade;
-
-            $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade', valor = '$valor'  WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
-        }else {
-            $valor = str_replace(",", ".", $row[0]['valor']);
+            $valor = $preco;
             $valor = $valor * $quantidade;
 
             $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade', valor = '$valor'  WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
         }
+        else {
+            $valor = $preco;
+            $valor = $valor * $quantidade;
+
+           $sql = "UPDATE tbpedidos_item SET quantidade = '$quantidade', valor = '$valor'  WHERE idpedido = '$idpedido' and iditem= '$iditem' ";
+        }
+        
         $return_query =  $this->conexao->query($sql);
 
         $this->atualizaPrecoVenda($idpedido);
