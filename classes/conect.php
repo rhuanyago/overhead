@@ -154,13 +154,14 @@ if ($parametrotela == 'adicionarProdutos') {
     $obj = new vision();
 
     $categoria = $_POST['categoria'];
-    $nome = $_POST['nome'];
+    $nome = $_POST['descricao'];
     $referencia = $_POST['referencia'];
     $preco = $_POST['preco'];
     $estoque = $_POST['estoque'];
     $habilitado = $_POST['habilitado'];
+    $upload = $_FILES;
 
-    echo $obj->adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado);
+    echo $obj->adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado, $upload);
 }
 
 if ($parametrotela == 'consultarCliente') {
@@ -338,12 +339,14 @@ if ($parametrotela == 'consultarUsuario') {
         $preco = $row['preco'];
         $estoque = $row['estoque'];
         $habilitado = $row['habilitado'];
+        // $url = 'img src="'. $row['url'].'" ';
+
         if ($habilitado == "S") {
             $habilitado = ' <span class="badge badge-success text-center">Sim</span>';
         }else{
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
-        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']."'><i class='fas fa-pencil-alt'></i></span>";
+        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']." '><i class='fas fa-pencil-alt'></i></span>";
         $btn .= "<span class='btn btn-danger text-white' id='btnExcluirProdutos' data-idproduto='".$idproduto."' data-referencia='".$referencia."' ><i class='far fa-trash-alt'></i></span>";
 
         $arr[] = [$nome, $referencia, $descricao, $preco, $estoque,$habilitado, $btn];
@@ -609,5 +612,6 @@ if ($parametrotela == 'listarFormasPagamento') {
 
     echo json_encode($arr);
 }
+
 
 ?>

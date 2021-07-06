@@ -93,6 +93,7 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
         <link rel="stylesheet" href="vendor/datatables/media/css/dataTables.bootstrap4.css" />
         <link rel="stylesheet" type="text/css" href="js/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="js/alertifyjs/css/themes/default.css">
+        <link rel="stylesheet" href="vendor/bootstrap-fileupload/bootstrap-fileupload.min.css" />
         <!-- Theme CSS -->
         <link rel="stylesheet" href="css/theme.css" />
 
@@ -109,7 +110,6 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
         <script src="funcoes.js"></script>
-
     </head>
 
     <body>

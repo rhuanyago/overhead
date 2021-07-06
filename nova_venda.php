@@ -183,6 +183,13 @@ $rowListar = $obj->listarItens($idpedido);
                                 </div>
                             </div>
 
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label  text-weight-bold">Fotos</label>
+                                    <!-- <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly> -->
+                                </div>
+                            </div>
+
                         </div> <!-- fim row -->
 
                         <div class="row">
@@ -335,9 +342,7 @@ $rowListar = $obj->listarItens($idpedido);
 </section>
 
 <script>
-    function teste() {
 
-    }
     $(document).ready(function() {
 
         /* alert("ready");//Thank You Saviour */

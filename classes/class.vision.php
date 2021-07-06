@@ -324,7 +324,7 @@ class vision{
 
     }
 
-    public function adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado){
+    public function adicionarProdutos($categoria, $nome, $referencia, $preco, $estoque, $habilitado, $upload){
 
         //$c = new conectar();
         //$conexao = $c->conexao();
@@ -332,6 +332,7 @@ class vision{
         $preco = str_replace(",", ".", $preco);
 
         $usuid = $_SESSION['usuid'];
+        $_FILES = $upload;
 
         $sql = "SELECT * FROM tbproduto where referencia = '$referencia' ";
         $sql = $this->conexao->query($sql);
@@ -342,7 +343,23 @@ class vision{
         }elseif ($categoria == "ND") {
             return 2;
         }else {
-            $sql = "INSERT INTO tbproduto (referencia, idcategoria, preco, descricao, habilitado, estoque, usuid) VALUES ('$referencia', '$categoria', '$preco', '$nome', '$habilitado', '$estoque','$usuid')";
+
+            $target_directory = "../img/uploads/";
+            $pname = rand(1000, 10000) . "-" . $_FILES["fileUpload"]["name"];
+            $target_file = $target_directory . basename($_FILES["fileUpload"]["name"]);
+            $target_file;
+            $filetype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+            $url = $pname;
+            $newfilename = $target_directory . $pname;
+
+            if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $newfilename)) {
+                
+            } else {
+                
+            }
+
+
+            $sql = "INSERT INTO tbproduto (referencia, idcategoria, imagem, preco, descricao, habilitado, estoque, usuid) VALUES ('$referencia', '$categoria', '$url','$preco', '$nome', '$habilitado', '$estoque','$usuid')";
         
             return $this->conexao->query($sql);
         }
@@ -492,6 +509,7 @@ class vision{
             $descricao = $row['descricao'];
             $estoque = $row['estoque'];
             $habilitado = $row['habilitado'];
+            // $url = $row['url'];
 
             $dado = array();
             $dado['idproduto'] = $idproduto;
@@ -502,6 +520,7 @@ class vision{
             $dado['preco'] = $preco;
             $dado['estoque'] = $estoque;
             $dado['habilitado'] = $habilitado;
+            // $dado['url'] = $url; 
             $dados[] = $dado;
         }
 
@@ -563,6 +582,18 @@ class vision{
 
         return $row;
 
+    }
+
+    public function ultimoProduto()
+    {
+        //$c = new conectar();
+        //$conexao = $c->conexao();
+
+        $query = "SELECT max(id)id FROM tbproduto c;";
+        $query = $this->conexao->query($query);
+        $row = $query->fetch_assoc();
+
+        return $row;
     }
 
     public function listaCategoria(){
