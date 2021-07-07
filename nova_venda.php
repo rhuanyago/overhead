@@ -49,9 +49,9 @@ $rowListar = $obj->listarItens($idpedido);
     /*Apply individual Styles to one*/
 
     .spinner-roundVal {
-        margin: auto 2px;
+        /* margin: auto 2px; */
         border-radius: 20px !important;
-        width: auto !important;
+        /* width: auto !important; */
     }
 
     .spinner-roundbutton {
@@ -117,7 +117,7 @@ $rowListar = $obj->listarItens($idpedido);
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label class=" control-label text-weight-bold">Referência</label>
-                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper>
+                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -182,24 +182,17 @@ $rowListar = $obj->listarItens($idpedido);
                                     <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly>
                                 </div>
                             </div>
-
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label  text-weight-bold">Fotos</label>
-                                    <!-- <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly> -->
-                                </div>
-                            </div>
-
-                        </div> <!-- fim row -->
-
-                        <div class="row">
-                            <div class="col-sm-3">
                                 <div id="addProduto" class="form-group">
                                     <label class="control-label  text-weight-bold">Incluir</label>
                                     <button id="AdicionarProduto" type="button" class="btn btn-dark btn-block" value=""><i class="fas fa-plus"></i> Adicionar Produto</button>
                                 </div>
                             </div>
-                            <br><br>
+
+
+                        </div> <!-- fim row -->
+
+                        <div class="row">
                             <div id="estoqueIndis" class="col-sm-12 oculto">
                                 <div class="center">
                                     <div class="alert alert-danger">
@@ -208,6 +201,13 @@ $rowListar = $obj->listarItens($idpedido);
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <img id="img" class="float-center text-center" src="img/sem-foto.jpg" height=350 width=350\>
+
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
@@ -342,7 +342,6 @@ $rowListar = $obj->listarItens($idpedido);
 </section>
 
 <script>
-
     $(document).ready(function() {
 
         /* alert("ready");//Thank You Saviour */
@@ -354,7 +353,7 @@ $rowListar = $obj->listarItens($idpedido);
 
             trigger_Spinner($(this), "-", {
                 max: 1000,
-                min: 0,
+                min: 1,
             }); //Triggers the Spinner Actuator
         }); /*end Handle Minus Button click*/
 
@@ -363,7 +362,7 @@ $rowListar = $obj->listarItens($idpedido);
 
             trigger_Spinner($(this), "+", {
                 max: 1000,
-                min: 0,
+                min: 1,
             }); //Triggers the Spinner Actuator    
         }); /*end Handle Plus Button Click*/
 
@@ -390,7 +389,7 @@ $rowListar = $obj->listarItens($idpedido);
                             var preco = result["preco"];
                             var descricao = result["descricao"];
                             var estoque = result["estoque"];
-
+                            var img = result["imagem"];
                             $("#referencia").val(referencia);
                             $("#preco").val(preco);
                             $("#descricao").val(descricao);
@@ -398,6 +397,9 @@ $rowListar = $obj->listarItens($idpedido);
                             $("#estoque").val(estoque);
 
                             $('#qtde').attr('data-estoque', estoque);
+
+                            $('#img').attr('src', 'img/uploads/' + img);
+
 
                             if (estoque == 0 || estoque < 0) {
                                 var element = document.getElementById("addProduto");
@@ -422,6 +424,8 @@ $rowListar = $obj->listarItens($idpedido);
                 $("#qtde").val("1");
                 $("#estoque").val('');
                 $('#qtde').attr('data-estoque', '');
+                $('#img').attr('src', 'img/sem-foto.jpg');
+
                 var element = document.getElementById("addProduto");
                 element.classList.remove("oculto");
                 var estoqueIndis = document.getElementById("estoqueIndis");
@@ -541,7 +545,11 @@ $rowListar = $obj->listarItens($idpedido);
         var preco = document.getElementById("preco").value;
         var qtde = document.getElementById("qtde").value;
         var descricao = document.getElementById("descricao").value;
-        //dados=$('#frmCategoriaU').serialize();                
+        //dados=$('#frmCategoriaU').serialize();    
+        
+        if (referencia == "") {
+            return;
+        }
 
         $.ajax({
             type: "POST",

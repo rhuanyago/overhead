@@ -339,17 +339,24 @@ if ($parametrotela == 'consultarUsuario') {
         $preco = $row['preco'];
         $estoque = $row['estoque'];
         $habilitado = $row['habilitado'];
-        // $url = 'img src="'. $row['url'].'" ';
+
+        if (is_null($row['imagem']) || empty($row['imagem'])) {
+            $img = '<img src="img/sem-foto.jpg" width="200" />';
+            $img_edit = 'img/sem-foto.jpg';
+        }else {
+            $img = '<img src="img/uploads/' . $row['imagem'] . '" width="200" />';
+            $img_edit = 'img/uploads/' . $row['imagem'] . ' ';
+        }
 
         if ($habilitado == "S") {
             $habilitado = ' <span class="badge badge-success text-center">Sim</span>';
         }else{
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
-        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']." '><i class='fas fa-pencil-alt'></i></span>";
+        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']. "' data-img='" . $img_edit . "'><i class='fas fa-pencil-alt'></i></span>";
         $btn .= "<span class='btn btn-danger text-white' id='btnExcluirProdutos' data-idproduto='".$idproduto."' data-referencia='".$referencia."' ><i class='far fa-trash-alt'></i></span>";
 
-        $arr[] = [$nome, $referencia, $descricao, $preco, $estoque,$habilitado, $btn];
+        $arr[] = [$img, $nome, $referencia, $descricao, $preco, $estoque,$habilitado, $btn];
 
 
      }

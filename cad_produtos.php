@@ -163,12 +163,12 @@ $ultimoIdProduto = $id['id'] + 1;
                                             <span class="fileupload-preview"></span>
                                         </div>
                                         <span class="btn btn-primary text-light btn-file">
-                                            <span class="fileupload-exists">Change</span>
-                                            <span class="fileupload-new">Select file</span>
+                                            <span class="fileupload-exists">Trocar</span>
+                                            <span class="fileupload-new">Selecionar Arquivo</span>
                                             <input type="file" class="fileToUpload" accept="image/*" onchange="preview_image(event)" name="fileUpload" />
                                         </span>
-                                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remove</a>
-                                        <button type="button" class="btn btn-primary text-light fileupload-exists" id="enviar" onclick="uploadFile();"><i class="glyphicon glyphicon-floppy-open"></i> Enviar</button>
+                                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remover</a>
+                                        <!-- <button type="button" class="btn btn-primary text-light fileupload-exists" id="enviar" onclick="uploadFile();"><i class="glyphicon glyphicon-floppy-open"></i> Enviar</button> -->
                                     </div>
                                 </div>
 

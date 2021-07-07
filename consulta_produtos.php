@@ -76,7 +76,7 @@ $conexao = $c->conexao();
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Atualizar Usuários</h4>
+                    <h4 class="modal-title" id="myModalLabel">Atualizar Produto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -105,6 +105,24 @@ $conexao = $c->conexao();
                             <option value="S">Sim</option>
                             <option value="N">Não</option>
                         </select>
+                        <label>Foto</label>
+                        <img id="img" class="form-control " src="img/sem-foto.jpg" width=50\>
+                        <!-- <span class='btn btn-danger text-white form-control' id='btnExcluirProdutos'><i class='far fa-trash-alt'></i></span> -->
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div class="input-append">
+                                <div class="uneditable-input">
+                                    <i class="fas fa-file fileupload-exists"></i>
+                                    <span class="fileupload-preview"></span>
+                                </div>
+                                <span class="btn btn-primary text-light btn-file">
+                                    <span class="fileupload-exists">Trocar</span>
+                                    <span class="fileupload-new">Selecionar Arquivo</span>
+                                    <input type="file" class="fileToUpload " accept="image/*" onchange="preview_image(event)" name="fileUpload" />
+                                </span>
+                                <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remover</a>
+                                <!-- <button type="button" class="btn btn-primary text-light fileupload-exists" id="enviar" onclick="uploadFile();"><i class="glyphicon glyphicon-floppy-open"></i> Enviar</button> -->
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -177,6 +195,7 @@ $conexao = $c->conexao();
         var preco = $(this).attr('data-valor');
         var estoque = $(this).attr('data-estoque');
         var habilitado = $(this).attr('data-habilitado');
+        var img = $(this).attr('data-img');
         $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #categoriaU").val(idcategoria); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
@@ -187,6 +206,10 @@ $conexao = $c->conexao();
         $('#atualizaProdutos').on('shown.bs.modal', function() {
             $('#descricaoU').focus(); //pegando foco do campo MAC ao abrir
         });
+
+        $('.modal-body #img').attr('src', img);
+
+
     });
 </script>
 
@@ -247,12 +270,17 @@ $conexao = $c->conexao();
                     ], //ordenação da 2° coluna do datatable para descendente 
                     "bInfo": false,
                     "scrollX": false, // cria o scroll no dataTable   
+                    autoWidth: true,
+                    responsive: true,
                     // paging: false,     
                     searching: true,
                     ordering: true,
                     data: dados,
                     columns: [ //head da table direto no javascript
                         //{title: 'ID' }, 
+                        {
+                            title: 'Imagem'
+                        },
                         {
                             title: 'Categoria'
                         },
@@ -277,10 +305,13 @@ $conexao = $c->conexao();
                     ],
                     "columnDefs": [{
                             className: 'text-center',
-                            targets: [0, 1, 2, 3, 4, 5, 6]
+                            targets: [0, 1, 2, 3, 4, 5, 6,7]
                         },
                         // { width: 15, targets: [3,4,5,6,7,8] },
-                        // { width: 80, targets: 1 },
+                        {
+                            width: 80,
+                            targets: 0
+                        },
                     ],
                     language: { //PROPRIEDADES DO DATATABLE
                         "sEmptyTable": "Nenhum registro encontrado nesse período",
@@ -315,10 +346,10 @@ $conexao = $c->conexao();
 </script>
 
 <script type="text/javascript">
-    jQuery.noConflict();
-    jQuery(function($) {
-        $("#referenciaU").mask("99.99999");
-    });
+    // jQuery.noConflict();
+    // jQuery(function($) {
+    //     $("#referenciaU").mask("99.99999");
+    // });
 </script>
 
 <script type="text/javascript">

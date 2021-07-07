@@ -344,20 +344,28 @@ class vision{
             return 2;
         }else {
 
-            $target_directory = "../img/uploads/";
-            $pname = rand(1000, 10000) . "-" . $_FILES["fileUpload"]["name"];
-            $target_file = $target_directory . basename($_FILES["fileUpload"]["name"]);
-            $target_file;
-            $filetype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            $url = $pname;
-            $newfilename = $target_directory . $pname;
+            $url = '';
+            if(!empty($_FILES) || isset($_FILES["fileUpload"]["size"])){
 
-            if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $newfilename)) {
-                
-            } else {
-                
+                if ($_FILES["fileUpload"]["size"] > 0) {    
+
+                    $target_directory = "../img/uploads/";
+                    $pname = rand(1000, 10000) . "-" . $_FILES["fileUpload"]["name"];
+                    $target_file = $target_directory . basename($_FILES["fileUpload"]["name"]);
+                    $target_file;
+                    $filetype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                    $url = $pname;
+                    $newfilename = $target_directory . $pname;
+
+                    if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $newfilename)) {
+                    } else {
+                    }
+
+                }
+
+
             }
-
+            
 
             $sql = "INSERT INTO tbproduto (referencia, idcategoria, imagem, preco, descricao, habilitado, estoque, usuid) VALUES ('$referencia', '$categoria', '$url','$preco', '$nome', '$habilitado', '$estoque','$usuid')";
         
@@ -509,6 +517,7 @@ class vision{
             $descricao = $row['descricao'];
             $estoque = $row['estoque'];
             $habilitado = $row['habilitado'];
+            $imagem = $row['imagem'];
             // $url = $row['url'];
 
             $dado = array();
@@ -520,7 +529,7 @@ class vision{
             $dado['preco'] = $preco;
             $dado['estoque'] = $estoque;
             $dado['habilitado'] = $habilitado;
-            // $dado['url'] = $url; 
+            $dado['imagem'] = $imagem;
             $dados[] = $dado;
         }
 
@@ -657,19 +666,21 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.referencia,c.descricao,c.preco,c.habilitado,c.estoque FROM tbproduto c where c.referencia = '$referencia' and c.habilitado = 'S'";
+        $sql = "SELECT c.referencia,c.descricao,c.preco,c.habilitado,c.estoque,c.imagem FROM tbproduto c where c.referencia = '$referencia' and c.habilitado = 'S'";
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_array();
 
         $preco = $row['preco'];
         $descricao = $row['descricao'];
         $estoque = $row['estoque'];
+        $imagem = $row['imagem'];
 
         $ar = array(
             'referencia'=>$referencia,
             'preco'=>$preco,
             'descricao'=>$descricao,
             'estoque' => $estoque,
+            'imagem' => $imagem
         );
         
 
@@ -738,22 +749,39 @@ class vision{
         $row = $sqlEstoque->fetch_assoc();
 
         if($sqlEstoque->num_rows != 0){
-            
-            
-            $teste = $quantidade - $row['estoque'];
-            $zika = (int)$row['estoque'] + (int)$teste ;
 
+            $teste = $quantidade - $row['estoque'];
+            $zika = (int)$row['estoque'] + (int)$teste;
+
+            // echo (int)$row['estoque'] . "<br>";
             // echo $teste . "<br>";
             // echo $zika;
+            // echo $quantidade . "<br>";
+            // echo $row['quantidade'] . "<br>";
+            // echo (int)$row['estoque'] . "<br>";
+            // exit;           
+           
 
-            if ($zika >= $teste) {
+            if ($row['estoque'] > 0) {
+                // echo 'tem estoque';
                 return true;
-            } else if ($quantidade == $row['quantidade']) {
-                return true;
-            } else {
+            }else {
+
+                if ($quantidade == $row['quantidade']) {
+                    // echo 'quantidade igual - ok';
+                    return true;
+                } else if ($quantidade < $row['quantidade']) {
+                    // echo 'retirando quantidade - ok';
+                    return true;
+                }else {
+                    // echo 'nenhum deles';
+                    return false;
+                }
+                // echo 'fora de tudo eles';
                 return false;
             }
         }
+
         return true;
 
     }
@@ -797,7 +825,6 @@ class vision{
         //$conexao = $c->conexao();
 
         $estoque = $this->checkEstoque($referencia, $quantidade);
-
         
         if ($estoque == false) {
             return false;
