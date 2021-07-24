@@ -74,7 +74,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.*, DATE_FORMAT(hora,'%d/%m/%Y %H:%i:%s') AS hora, a.idusuario FROM sistema.logs c, tbusuarios a WHERE a.email = c.email;";
+        $sql = "SELECT c.*, DATE_FORMAT(hora,'%d/%m/%Y %H:%i:%s') AS hora, a.idusuario FROM logs c, tbusuarios a WHERE a.email = c.email;";
         $sql = $this->conexao->query($sql);  
 
         $dados = array();
@@ -158,14 +158,30 @@ class vision{
 
         //$c = new conectar();
         //$conexao = $c->conexao();
-
-        $nome = $dados[0];
-        $rg = $dados[1];
-        $dt_nascimento = $dados[2];
-        $telefone = $dados[3];
+        $tipoCadastro = $_POST['tipocad'];
+        $tipoCliente = $_POST['tipo'];
+        $iss = $_POST['iss'];
+        $nome = trim($_POST['nome']);
+        // $nomeJuridico = trim($_POST['nomeJuridico']);
+        $nomeFantasia = trim($_POST['nomeFantasia']);
+        $apelido = trim($_POST['apelido']);
+        $cnpj = $_POST['cnpj'];
+        $cpf = $_POST['cpf'];
+        $rg = trim($_POST['rg']);
+        $dt_nascimento = trim($_POST['dtnascimento']);
+        $telefone = $_POST['telefone'];
+        // $telefoneJ = $_POST['telefoneJ'];
+        $telefone2J = $_POST['telefone2J'];
+        $cep = $_POST['cep'];
+        $endereco = $_POST['endereco'];
+        $bairro = $_POST['bairro'];
+        $uf = $_POST['uf'];
+        $cidade = $_POST['cidade'];
+        $complemento = $_POST['complemento'];
+        $numero = trim($_POST['numero']);
         $usuid = $_SESSION['usuid'];
 
-        $sql = "SELECT count(*) as total from tbclientes WHERE rg = '$rg' ";
+        $sql = "SELECT count(*) as total from tbclientes WHERE rg = '$rg' or cnpj = '$cnpj' or cpf = '$cpf'  ";
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
@@ -173,13 +189,12 @@ class vision{
             return 0;
         }else{
 
-        $sql = "INSERT INTO tbclientes (nome, rg, telefone, dt_nascimento, data_cadastro, usuid, habilitado) VALUES 
-        ('$nome', '$rg', '$telefone', '$dt_nascimento', NOW(), '$usuid', 'S') ";
+            $sql = "INSERT INTO tbclientes (nome, nomefantasia, apelido, tipocad, tipopessoa, iss, cpf, cnpj, rg, telefone, telefone2, dt_nascimento, data_cadastro, usuid, habilitado, cep, endereco, bairro, uf, cidade, complemento, numero) VALUES ('$nome', '$nomeFantasia', '$apelido', '$tipoCadastro', '$tipoCliente', '$iss', '$cpf', '$cnpj', '$rg', '$telefone', '$telefone2J', '$dt_nascimento', NOW(), '$usuid', 'S', '$cep', '$endereco', '$bairro', '$uf', '$cidade', '$complemento', '$numero') ";
 
-        $mensagem = "O Usuário ".$_SESSION['email']." cadastrou o Cliente $nome ";
-        $this->salvaLog($mensagem);
+            $mensagem = "O Usuário ".$_SESSION['email']." cadastrou o Cliente $nome ";
+            $this->salvaLog($mensagem);
 
-        return $this->conexao->query($sql);
+            return $this->conexao->query($sql);
 
         }
 
@@ -264,7 +279,7 @@ class vision{
     }
 
 
-    public function atualizarClientes($reg,$nome,$rg,$telefone,$dtnascimento,$habilitado){
+    public function atualizarClientes($reg,$nome,$rg,$cpf,$cnpj,$telefone,$dtnascimento,$habilitado){
 
         //$c = new conectar();
         //$conexao = $c->conexao();
@@ -276,9 +291,7 @@ class vision{
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
-        if (empty($nome) || empty($rg) || empty($telefone) || empty($dtnascimento)){
-            return 2;
-        }else if($rg != $row['rg']){
+        if($rg != $row['rg']){
             $sql = "SELECT count(*) as existe FROM tbclientes c WHERE rg = '$rg' ";
             $sql = $this->conexao->query($sql);
             $row = $sql->fetch_assoc();
@@ -287,7 +300,7 @@ class vision{
                 return 0;
             }else{             
 
-                $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
+                $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', cpf='$cpf', cnpj = '$cnpj', telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
                 echo $this->conexao->query($sql);
 
                 $mensagem = "O Usuário ".$_SESSION['email']." atualizou o Cliente para $nome ";
@@ -296,7 +309,7 @@ class vision{
             
         }else{            
 
-            $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
+            $sql = "UPDATE tbclientes SET nome = '$nome', rg = '$rg', cpf='$cpf', cnpj = '$cnpj',telefone = '$telefone', dt_nascimento = '$dtnascimento', habilitado = '$habilitado', modificado = NOW(), usuid = '$usuid' WHERE reg = '$reg'";
 
             echo $this->conexao->query($sql);
 
@@ -388,7 +401,10 @@ class vision{
            $dado = array();
            $dado['reg'] = $row["reg"];
            $dado['nome'] = $row["nome"];
+           $dado['nomeFantasia'] = $row["nomefantasia"];
            $dado['rg'] = $row["rg"];
+           $dado['cpf'] = $row["cpf"];
+           $dado['cnpj'] = $row["cnpj"];
            $dado['telefone'] = $row["telefone"];
            $dado['dt_nascimento'] = $row["dt_nascimento"];
            $dado['habilitado'] = $row["habilitado"];
@@ -569,12 +585,12 @@ class vision{
     }
 
 
-    public function gerarVenda($titulo){
+    public function gerarVenda($titulo,$cliente){
         //$c = new conectar();
         //$conexao = $c->conexao();
 
 
-        $sql = "INSERT INTO tbpedidos (reg, tipo, titulo, data_inc) VALUES ('99','V','$titulo', NOW()) ";
+        $sql = "INSERT INTO tbpedidos (reg, tipo, titulo, data_inc) VALUES ('$cliente','V','$titulo', NOW()) ";
 
         return $this->conexao->query($sql);
 
@@ -1091,7 +1107,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT count(*) as existe FROM tbpaginas WHERE paginas like '$url%' ";
+        $sql = "SELECT count(*) as existe FROM tbpaginas WHERE paginas = '$url' ";
         $sql = $this->conexao->query($sql);
         $row = $sql->fetch_assoc();
 
@@ -1284,6 +1300,27 @@ class vision{
         } 
 
         return $option;
+    }
+
+    public function complete($param)
+    {
+
+        $sql = "SELECT * FROM tbclientes WHERE rg LIKE '" . $param . "%' or nome LIKE '%" . $param . "%' or cpf LIKE '%" . $param . "%' or cnpj LIKE '%" . $param . "%' limit 10";
+        $sql = $this->conexao->query($sql);
+
+        $output = '<ul class="rhu list-unstyled">';
+        if (mysqli_num_rows($sql) > 0) {
+            while ($row = mysqli_fetch_array($sql)) {
+                $output .= '<li class="listin">' . $row["nome"]. '</li>';
+            }
+        } else {
+            $output .= '';
+        }
+        $output .= '</ul>';
+
+        echo $output;  
+
+        
     }
 
 

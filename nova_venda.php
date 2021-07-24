@@ -5,6 +5,7 @@ require_once "classes/class.vision.php";
 $c = new conectar();
 $conexao = $c->conexao();
 $obj = new vision();
+
 if (!isset($_GET['idpedido'])) {
 
     $result = $obj->ultimoPedido();
@@ -56,6 +57,16 @@ $rowListar = $obj->listarItens($idpedido);
 
     .spinner-roundbutton {
         border-radius: 100px !important;
+    }
+
+    .rhu {
+        background-color: #eee;
+        color: black;
+        cursor: pointer;
+    }
+
+    .listin {
+        padding: 12px;
     }
 </style>
 
@@ -117,7 +128,7 @@ $rowListar = $obj->listarItens($idpedido);
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label class=" control-label text-weight-bold">Referência</label>
-                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper required>
+                                    <input type="text" name="referencia" id="referencia" class="form-control text-weight-bold" maxlength="8" upper >
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -182,7 +193,7 @@ $rowListar = $obj->listarItens($idpedido);
                                     <input type="number" name="estoque" id="estoque" class="form-control text-weight-bold" maxlength="10" readonly>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <div id="addProduto" class="form-group">
                                     <label class="control-label  text-weight-bold">Incluir</label>
                                     <button id="AdicionarProduto" type="button" class="btn btn-dark btn-block" value=""><i class="fas fa-plus"></i> Adicionar Produto</button>
@@ -197,7 +208,16 @@ $rowListar = $obj->listarItens($idpedido);
                                 <div class="center">
                                     <div class="alert alert-danger">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque Indisponível.</strong>
+                                        <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque
+                                            Indisponível.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="estoque1" class="col-sm-12 oculto">
+                                <div class="center">
+                                    <div class="alert alert-warning">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Restam apenas 1 produto disponível em Estoque!</strong>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +262,8 @@ $rowListar = $obj->listarItens($idpedido);
                                                             <td class="text-center"><?php echo $row['quantidade'] ?></td>
                                                             <td class="text-center"><?php echo $row['valor']; ?></td>
                                                             <td class="text-center"><?php echo $row['bruto']; ?></td>
-                                                            <td class="actions-hover actions-fade text-center "><?php echo $row['btn']  ?></td>
+                                                            <td class="actions-hover actions-fade text-center ">
+                                                                <?php echo $row['btn']  ?></td>
                                                         </tr>
                                                     <?php
                                                         $valor = str_replace(',', '.', str_replace('.', '', $row['valor']));
@@ -255,7 +276,9 @@ $rowListar = $obj->listarItens($idpedido);
                                                         <td></td>
                                                         <td class="text-right" style="color:red"><b>Total<b></td>
                                                         <td class="text-center"><b><?php echo $qtde; ?><b></td>
-                                                        <td class="text-center"><b><?php echo number_format($resultado, 2, ",", "."); ?><b></td>
+                                                        <td class="text-center">
+                                                            <b><?php echo number_format($resultado, 2, ",", "."); ?><b>
+                                                        </td>
                                                         <td></td>
                                                     </tr>
                                                 </tbody>
@@ -268,7 +291,8 @@ $rowListar = $obj->listarItens($idpedido);
                                 <div class="form-group">
                                     <br>
                                     <!-- <a href="form_pagamento.php?idpedido=<?php echo $idpedido ?>" class="btn btn-danger btn-block">Formas de Pagamento</a><br> -->
-                                    <button type="submit" class="btn btn-primary btn-block text-light">Formas de Pagamento</button><br>
+                                    <button type="submit" class="btn btn-primary btn-block text-light">Formas de
+                                        Pagamento</button><br>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +317,8 @@ $rowListar = $obj->listarItens($idpedido);
                         <div class="center">
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque Indisponível.</strong>
+                                <strong><i class="fas fa-exclamation-triangle"></i> Atenção! Produto com Estoque
+                                    Indisponível.</strong>
                             </div>
                         </div>
                     </div>
@@ -398,8 +423,16 @@ $rowListar = $obj->listarItens($idpedido);
 
                             $('#qtde').attr('data-estoque', estoque);
 
-                            $('#img').attr('src', 'img/uploads/' + img);
+                            if (img == '') {
+                                $('#img').attr('src', 'img/sem-foto.jpg');
+                            } else {
+                                $('#img').attr('src', 'img/uploads/' + img);
+                            }
 
+                            if (estoque == 1) {
+                                var estoqueIndis = document.getElementById("estoque1");
+                                estoqueIndis.classList.remove("oculto");
+                            }
 
                             if (estoque == 0 || estoque < 0) {
                                 var element = document.getElementById("addProduto");
@@ -483,13 +516,39 @@ $rowListar = $obj->listarItens($idpedido);
                 }
             });
         });
+
+        $('#rg').keyup(function() {
+            var rg = $(this).val();
+            if (rg != '') {
+                $.ajax({
+                    url: "classes/conect.php",
+                    method: "POST",
+                    data: {
+                        param: rg,
+                        paramTela: 'complete',
+                    },
+                    success: function(data) {
+                        $('#countryList').fadeIn();
+                        $('#countryList').html(data);
+                    }
+                });
+            }
+        });
+
+        $(document).on('click', 'li', function() {
+            $('#rg').val($(this).text());
+            $('#countryList').fadeOut();
+            $('#rg').focus();
+        });
+
     });
 
     //This function will take the clicked button and actuate the spinner based on the provided function/operator
     // - this allows you to adjust the limits of specific spinners based on classnames
     function trigger_Spinner(clickedButton, plus_minus, limits) {
 
-        var valueElement = clickedButton.closest('.customSpinner').find('.spinnerVal'); //gets the closest value element to this button
+        var valueElement = clickedButton.closest('.customSpinner').find(
+            '.spinnerVal'); //gets the closest value element to this button
         var controllerbuttons = {
             minus: clickedButton.closest('.customSpinner').find('.spinnerMinus'),
             plus: clickedButton.closest('.customSpinner').find('.spinnerPlus')
@@ -546,7 +605,7 @@ $rowListar = $obj->listarItens($idpedido);
         var qtde = document.getElementById("qtde").value;
         var descricao = document.getElementById("descricao").value;
         //dados=$('#frmCategoriaU').serialize();    
-        
+
         if (referencia == "") {
             return;
         }
@@ -681,8 +740,10 @@ $rowListar = $obj->listarItens($idpedido);
         var preco = $(this).attr('data-preco'); //Pegando os dados que são passados no botão
         var qtde = $(this).attr('data-qtde');
         var estoque = $(this).attr('data-estoque');
-        $(".modal-body #idprodutoU").val(idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
-        $(".modal-body #descricaoU").val(descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+        $(".modal-body #idprodutoU").val(
+            idproduto); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+        $(".modal-body #descricaoU").val(
+            descricao); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
         $(".modal-body #referenciaU").val(referencia);
         $(".modal-body #precoU").val(preco);
         $(".modal-body #qtdeU").val(qtde);

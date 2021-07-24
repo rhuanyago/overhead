@@ -63,9 +63,9 @@ require_once "Connections/conexao.php";
                                     <tr>
                                         <th>Reg</th>
                                         <th>Nome</th>
-                                        <th>RG</th>
+                                        <!-- <th>RG</th> -->
                                         <th>Telefone</th>
-                                        <th>Data de Nascimento</th>
+                                        <th>CPF/CNPJ</th>
                                         <th>Habilitado</th>
                                         <th>Ações</th>
                                     </tr>
@@ -92,8 +92,12 @@ require_once "Connections/conexao.php";
                         <input type="text" hidden="" id="regU" name="regU">
                         <label>Nome</label>
                         <input type="text" id="nomeU" name="nomeU" class="form-control input-sm">
-                        <label>RG</label>
+                        <label>Rg</label>
                         <input type="text" id="rgU" name="rgU" data-plugin-masked-input data-input-mask="99.999.999-9" class="form-control input-sm">
+                        <label>CPF</label>
+                        <input type="text" id="cpfU" name="cpfU" data-plugin-masked-input data-plugin-masked-input data-input-mask="999.999.999-99" class="form-control input-sm">
+                        <label>CNPJ</label>
+                        <input type="text" id="cnpjU" name="cnpjU" data-plugin-masked-input data-plugin-masked-input data-input-mask="99.999.999/9999-99" class="form-control input-sm">
                         <label>Telefone</label>
                         <input type="text" id="telefoneU" name="telefoneU" data-plugin-masked-input data-input-mask="(99) 99999-9999" class="form-control input-sm">
                         <label>Data de Nascimento</label>
@@ -151,7 +155,7 @@ require_once "Connections/conexao.php";
             },
             "columnDefs": [{
                     className: 'text-center',
-                    targets: [0, 1, 2, 3, 4, 5, 6]
+                    targets: [0, 1, 2, 3, 4, 5]
                 },
                 // { width: 15, targets: [3,4,5,6,7,8] },
                 // { width: 80, targets: 1 },
@@ -163,13 +167,10 @@ require_once "Connections/conexao.php";
                     "data": 'nome'
                 },
                 {
-                    "data": 'rg'
-                },
-                {
                     "data": 'telefone'
                 },
                 {
-                    "data": 'dt_nascimento'
+                    "data": 'cpf_cnpj'
                 },
                 {
                     "data": 'habilitado'
@@ -210,12 +211,17 @@ require_once "Connections/conexao.php";
             var reg = $(this).attr('data-reg'); //Pegando os dados que são passados no botão
             var nome = $(this).attr('data-nome'); //Pegando os dados que são passados no botão
             var rg = $(this).attr('data-rg'); //Pegando os dados que são passados no botão
+            var cpf = $(this).attr('data-cpf'); //Pegando os dados que são passados no botão
+            var cnpj = $(this).attr('data-cnpj'); //Pegando os dados que são passados no botão
+            var rg = $(this).attr('data-rg'); //Pegando os dados que são passados no botão
             var telefone = $(this).attr('data-telefone'); //Pegando os dados que são passados no botão
             var dtnascimento = $(this).attr('data-dt_nascimento');
             var habilitado = $(this).attr('data-habilitado');
             $(".modal-body #regU").val(reg); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
             $(".modal-body #nomeU").val(nome); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
             $(".modal-body #rgU").val(rg); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+            $(".modal-body #cpfU").val(cpf); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
+            $(".modal-body #cnpjU").val(cnpj); // Jogando os valores nos seus respectivos campos dentro do corpo do Modal
             $(".modal-body #telefoneU").val(telefone);
             $(".modal-body #dtnascimentoU").val(dtnascimento);
             $(".modal-body #habilitadoU").val(habilitado);
@@ -230,6 +236,8 @@ require_once "Connections/conexao.php";
             var reg = document.getElementById("regU").value;
             var nome = document.getElementById("nomeU").value;
             var rg = document.getElementById("rgU").value;
+            var cpf = document.getElementById("cpfU").value;
+            var cnpj = document.getElementById("cnpjU").value;
             var telefone = document.getElementById("telefoneU").value;
             var dtnascimento = document.getElementById("dtnascimentoU").value;
             var habilitado = document.getElementById("habilitadoU").value;
@@ -240,6 +248,8 @@ require_once "Connections/conexao.php";
                     reg: reg,
                     nome: nome,
                     rg: rg,
+                    cpf: cpf,
+                    cnpj: cnpj,
                     telefone: telefone,
                     dtnascimento: dtnascimento,
                     habilitado: habilitado,

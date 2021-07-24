@@ -48,7 +48,7 @@ $obj = new vision();
         <div class="col-xl-12 order-1 mb-4">
             <section class="card">
                 <div class="text-left">
-                    <a class="btn btn-dark text-white" value="Venda" onclick="gerarVenda(this)" id="gerarVenda" href="nova_venda.php" style="border:none;"><i class="fas fa-plus"></i> Novo Pedido</a>
+                    <a class="btn btn-dark text-white" value="Venda" href="create_pedido.php" style="border:none;"><i class="fas fa-plus"></i> Novo Pedido</a>
                     <a class="btn btn-primary text-white" href="pedidos_finalizados.php" style="border:none;"><i class="fas fa-check-circle"></i> Pedidos Finalizados</a>
                 </div>
                 <header class="card-header card-header-transparent">

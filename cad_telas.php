@@ -91,7 +91,7 @@ require_once "Connections/conexao.php";
 
                                     <div class="row">
                                         <div class="col-sm-8 text-center">
-                                            <span id="btnRegistrar" name="btnRegistrar" onclick="salvar()" class="btn btn-danger mt-2 btn-txt"><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Cadastrar </span>
+                                            <span id="btnRegistrar" name="btnRegistrar" onclick="salvar()" class="btn btn-primary text-light mt-2 btn-txt"><i class="loading-icon fa fa-spinner fa-spin oculto"></i> Cadastrar </span>
                                             <a href="home.php" class="btn btn-dark mt-2">Voltar</a>
                                         </div>
                                     </div>

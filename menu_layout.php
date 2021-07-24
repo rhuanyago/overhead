@@ -246,7 +246,7 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
                                     </li>
                                     <!-- Fim menu Consultas -->
 
-                                    <li class="nav-parent nav-expanded">
+                                    <!-- <li class="nav-parent nav-expanded">
                                         <a href="#">
                                             <i class="fas fa-exchange-alt"></i>
                                             <span>Estoque</span>
@@ -264,13 +264,12 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
                                                     Relatórios
                                                 </a>
                                             </li>
-                                            <!-- adicionar mais -->
                                         </ul>
-                                    </li>
+                                    </li> -->
 
                                     <!-- Fim menu Estoque -->
 
-                                    <li class="nav-parent nav-expanded">
+                                    <!-- <li class="nav-parent nav-expanded">
                                         <a href="#">
                                             <i class="fas fa-dollar-sign"></i>
                                             <span>Financeiro</span>
@@ -288,9 +287,10 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
                                                     Relatórios
                                                 </a>
                                             </li>
-                                            <!-- adicionar mais -->
+
                                         </ul>
-                                    </li>
+                                    </li> -->
+
                                     <li class="nav-parent nav-expanded">
                                         <a href="#">
                                             <i class="fas fa-dollar-sign"></i>
@@ -323,12 +323,12 @@ if ($_SESSION['chave_acesso'] == md5('@wew67434$%#@@947@@#$@@!#54798#11a23@@dsa@
                                                     Logs
                                                 </a>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <a href="download/VisionPremium.apk" download>
                                                     <i class="fas fa-hand-holding-usd"></i>
                                                     Download Aplicativo
                                                 </a>
-                                            </li>
+                                            </li> -->
                                             <!-- adicionar mais -->
                                         </ul>
                                     </li>

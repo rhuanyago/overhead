@@ -64,14 +64,16 @@ if ($parametrotela == 'Login') {
 if ($parametrotela == 'registrarCliente') {
     $obj = new vision();    
 
-    $dados = array(
-        $_POST['nome'],
-        $_POST['rg'],
-        $_POST['dtnascimento'],
-        $_POST['telefone']
-    );
+    // print_r($_POST);
 
-    echo $obj->registrarCliente($dados);
+    // $dados = array(
+    //     $_POST['nome'],
+    //     $_POST['rg'],
+    //     $_POST['dtnascimento'],
+    //     $_POST['telefone']
+    // );
+
+    echo $obj->registrarCliente($_POST);
 }
 
 
@@ -133,11 +135,13 @@ if ($parametrotela == 'AtualizarClientes') {
     $reg = $_POST['reg'];
     $nome = $_POST['nome'];
     $rg = $_POST['rg'];
+    $cpf = $_POST['cpf'];
+    $cnpj = $_POST['cnpj'];
     $telefone = $_POST['telefone'];
     $dtnascimento = $_POST['dtnascimento'];
     $habilitado = $_POST['habilitado'];
 
-    echo $obj->atualizarClientes($reg,$nome,$rg,$telefone,$dtnascimento,$habilitado);
+    echo $obj->atualizarClientes($reg,$nome,$rg,$cpf,$cnpj,$telefone,$dtnascimento,$habilitado);
 
 }
 
@@ -173,10 +177,25 @@ if ($parametrotela == 'consultarCliente') {
     foreach ($result as $key => $row){
         $reg = $row['reg'];
         $nome = $row['nome'];
+        $nomeFantasia = $row['nomeFantasia'];
         $rg = $row['rg'];
+        $cpf = $row['cpf'];
+        $cnpj = $row['cnpj'];
         $telefone = $row['telefone'];
         $dtnascimento = $row['dt_nascimento']; 
         $habilitado = $row['habilitado']; 
+
+        if (empty($cpf)) {
+            $cpf_cnpj = $cnpj;
+        }else if(empty($cnpj)){
+            $cpf_cnpj = $cpf;
+        }
+
+        if (empty($nome)) {
+            $nome = $nomeFantasia;
+        } else if (empty($nomeFantasia)) {
+            $nome = $nome;
+        }
         
         if ($habilitado == "S") {
             $habilitado = ' <span class="badge badge-success text-center">Sim</span>';
@@ -184,7 +203,7 @@ if ($parametrotela == 'consultarCliente') {
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
         if(in_array('editarClientes', $_SESSION['nomeGrupo']) || $_SESSION['permissao'] == "SUPER-ADMIN") { 
-            $btnDel = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaClientes' id='btnAtualizaClientes' data-reg='".$reg."' data-nome='".$nome."' data-rg='".$rg."' data-telefone='".$telefone."' data-dt_nascimento='".$dtnascimento."' data-habilitado='".$row['habilitado']."'><i class='fas fa-pencil-alt'></i></span>";
+            $btnDel = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaClientes' id='btnAtualizaClientes' data-reg='".$reg."' data-nome='".$nome."' data-rg='".$rg. "' data-cpf='" . $cpf . "' data-cnpj='" . $cnpj . "' data-telefone='".$telefone."' data-dt_nascimento='".$dtnascimento."' data-habilitado='".$row['habilitado']."'><i class='fas fa-pencil-alt'></i></span>";
         }else{
             $btnDel = "<span class='btn btn-dark text-white disabled' ><i class='fas fa-pencil-alt'></i></span>";
         }
@@ -199,11 +218,11 @@ if ($parametrotela == 'consultarCliente') {
         $arr[] = [
             'reg' => $reg,
             'nome' => $nome,
-            'rg' => $rg,
             'telefone' => $telefone,
-            'dt_nascimento' => $dtnascimento,
+            'cpf_cnpj' => $cpf_cnpj,
             'habilitado'=> $habilitado,
-            'btn' => $btnDel]; //Ordem dos Registros na Datatable
+            'btn' => $btnDel
+        ]; //Ordem dos Registros na Datatable
 
 
     }
@@ -396,7 +415,9 @@ if ($parametrotela == 'consultarUsuario') {
      
     $titulo = $_POST['titulo'];
 
-    echo $obj->gerarVenda($titulo);
+    $cliente = $_POST['param'];
+
+    echo $obj->gerarVenda($titulo, $cliente);
 
  }
 
@@ -618,6 +639,17 @@ if ($parametrotela == 'listarFormasPagamento') {
     }
 
     echo json_encode($arr);
+}
+
+if ($parametrotela == "complete") {
+    $obj = new vision();
+
+
+    // print_r($_POST);
+
+    $param = $_POST['param'];
+
+    echo $obj->complete($param);
 }
 
 
