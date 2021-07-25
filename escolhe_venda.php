@@ -67,12 +67,12 @@ require_once "Connections/conexao.php";
                             </div>
                             <div id="countryList"></div>
                         </div>
-                        <!-- <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label  text-weight-bold">Cidade</label>
-                                    <input type="text" name="cidade" readonly class="form-control" />
-                                </div>
-                            </div> -->
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label  text-weight-bold">CPF/CNPJ</label>
+                                <input type="text" name="cpf_cnpj" readonly class="form-control" />
+                            </div>
+                        </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label  text-weight-bold">Tipo</label>
@@ -135,11 +135,13 @@ require_once "Connections/conexao.php";
         $("input[name='nome_cli']").blur(function() {
             var $nome_cli = $("input[name='nome_cli']");
             var $idcliente = $("input[name='idcliente']");
+            var $cpf_cnpj = $("input[name='cpf_cnpj']");
             $.getJSON('pega_cli2.php', {
                 nome: $(this).val()
             }, function(json) {
                 $nome_cli.val(json.nome_cli);
                 $idcliente.val(json.idcliente);
+                $cpf_cnpj.val(json.cpf_cnpj);
             });
         });
 
