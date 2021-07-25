@@ -451,7 +451,7 @@ class vision{
         //$c = new conectar();
         //$conexao = $c->conexao();
 
-        $sql = "SELECT c.*, a.permissao FROM tbusuarios c, tbpermissao a where c.idpermissao = a.idpermissao order by c.nome";
+        $sql = "SELECT c.*, a.permissao FROM tbusuarios c, tbpermissao a where c.idpermissao = a.idpermissao and permissao <> 'SUPER-ADMIN'order by c.nome";
         $sql = $this->conexao->query($sql);
 
         $dados = array();
