@@ -12,6 +12,11 @@ function retorna($nome, $conexao)
         $rows_rsperm = mysqli_fetch_assoc($sql);
         $valores['nome_cli'] = $rows_rsperm['nome'];
         $valores['idcliente'] = $rows_rsperm['reg'];
+        if (empty($rows_rsperm['cpf'])) {
+            $valores['cpf_cnpj'] = $rows_rsperm['cnpj'];
+        }else if(empty($rows_rsperm['cnpj'])){
+            $valores['cpf_cnpj'] = $rows_rsperm['cpf'];
+        }
     } else {
         $valores['nome_cli'] = 'Cliente não encontrado';
     }
