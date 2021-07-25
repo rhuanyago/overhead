@@ -104,7 +104,7 @@ require_once "Connections/conexao.php";
                         $c = new conectar();
                         $conexao = $c->conexao();
 
-                        $sql = "SELECT * FROM tbpermissao;";
+                        $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao;";
                         $sql = $conexao->query($sql);
                         ?>
                         <select name="permissaoU" id="permissaoU" class="form-control">

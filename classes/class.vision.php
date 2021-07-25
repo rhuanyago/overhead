@@ -1293,7 +1293,7 @@ class vision{
         //$c = new conectar();
         ////$conexao=$c->conexao();
         
-        $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao";
+        $sql = "SELECT * from tbpermissao where permissao <> 'SUPER-ADMIN' order by idpermissao;";
         $sql = $this->conexao->query($sql);
         while ($rows_rsperm = mysqli_fetch_assoc($sql)) { 
             $option[] = '<option value="'.$rows_rsperm['idpermissao'].'">'.$rows_rsperm['permissao'].'</option>';
