@@ -297,8 +297,19 @@ if ($parametrotela == 'consultarUsuario') {
         }else{
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
-        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaUsuarios' id='btnAtualizaUsuarios' data-idusuario='".$idusuario."' data-nome='".$nome."' data-email='".$email."' data-senha'".$row['senha']."' data-senha_confirma'".$row['senha_confirma']."' data-telefone='".$telefone."' data-dt_nascimento='".$dtnascimento."' data-habilitado='".$row['habilitado']."' data-idpermissao='".$row['idpermissao']."' data-permissao='".$permissao."'><i class='fas fa-pencil-alt'></i></span>";
-        $btn .= "<span class='btn btn-danger text-white' id='btnExcluirUsuario' data-idusuario='".$idusuario."' ><i class='far fa-trash-alt'></i></span>";
+
+        if (in_array('editarUsuarios', $_SESSION['nomeGrupo']) || $_SESSION['permissao'] == "SUPER-ADMIN") {
+            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaUsuarios' id='btnAtualizaUsuarios' data-idusuario='" . $idusuario . "' data-nome='" . $nome . "' data-email='" . $email . "' data-senha'" . $row['senha'] . "' data-senha_confirma'" . $row['senha_confirma'] . "' data-telefone='" . $telefone . "' data-dt_nascimento='" . $dtnascimento . "' data-habilitado='" . $row['habilitado'] . "' data-idpermissao='" . $row['idpermissao'] . "' data-permissao='" . $permissao . "'><i class='fas fa-pencil-alt'></i></span>";
+        } else {
+            $btn = "<span class='btn btn-dark text-white disabled'><i class='fas fa-pencil-alt'></i></span>";
+        }
+
+        if (in_array('excluirUsuarios', $_SESSION['nomeGrupo']) || $_SESSION['permissao'] == "SUPER-ADMIN") {
+            $btn .= "<span class='btn btn-danger text-white' id='btnExcluirUsuario' data-idusuario='" . $idusuario . "' ><i class='far fa-trash-alt'></i></span>";
+        } else {
+            $btn .= "<span class='btn btn-danger text-white disabled' ><i class='far fa-trash-alt'></i></span>";
+        }
+
 
         // $arr[] = [$nome,$email,$permissao,$telefone,$dtnascimento,$habilitado,$btn]; //Posição que cria o datatable;
 
@@ -372,8 +383,19 @@ if ($parametrotela == 'consultarUsuario') {
         }else{
             $habilitado = '<span class="badge badge-danger text-center">Não</span>';
         }
-        $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='".$idproduto."' data-idcategoria='".$idcategoria."'  data-nome='".$nome."' data-referencia='".$referencia."' data-descricao='".$descricao."' data-valor='".$preco. "'  data-estoque='" . $estoque . "' data-habilitado='".$row['habilitado']. "' data-img='" . $img_edit . "'><i class='fas fa-pencil-alt'></i></span>";
-        $btn .= "<span class='btn btn-danger text-white' id='btnExcluirProdutos' data-idproduto='".$idproduto."' data-referencia='".$referencia."' ><i class='far fa-trash-alt'></i></span>";
+
+        if (in_array('editarProdutos', $_SESSION['nomeGrupo']) || $_SESSION['permissao'] == "SUPER-ADMIN") {
+            $btn = "<span class='btn btn-dark text-white' data-toggle='modal' data-target='#atualizaProdutos' id='btnAtualizaProdutos' data-idproduto='" . $idproduto . "' data-idcategoria='" . $idcategoria . "'  data-nome='" . $nome . "' data-referencia='" . $referencia . "' data-descricao='" . $descricao . "' data-valor='" . $preco . "'  data-estoque='" . $estoque . "' data-habilitado='" . $row['habilitado'] . "' data-img='" . $img_edit . "'><i class='fas fa-pencil-alt'></i></span>";
+        } else {
+            $btn = "<span class='btn btn-dark text-white disabled'><i class='fas fa-pencil-alt'></i></span>";
+        }
+
+        if (in_array('excluirProdutos', $_SESSION['nomeGrupo']) || $_SESSION['permissao'] == "SUPER-ADMIN") {
+            $btn .= "<span class='btn btn-danger text-white' id='btnExcluirProdutos' data-idproduto='" . $idproduto . "' data-referencia='" . $referencia . "' ><i class='far fa-trash-alt'></i></span>";
+        } else {
+            $btn .= "<span class='btn btn-danger text-white disabled'><i class='far fa-trash-alt'></i></span>";
+        }
+
 
         $arr[] = [$img, $nome, $referencia, $descricao, $preco, $estoque,$habilitado, $btn];
 
