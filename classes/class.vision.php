@@ -1221,16 +1221,26 @@ class vision{
         //$conexao = $c->conexao();
 
         $valor=str_replace(",",".",$valor);
-        $valorrecebido=str_replace(",",".",$valorrecebido);
+        // $valorrecebido=str_replace(",",".",$valorrecebido);
 
-        $troco = $valor - $valorrecebido;
-        $troco=str_replace(",",".",$troco);
+        
+        // if (empty($valorrecebido)) {
+        //     $valorrecebido = '';
+        // }
+
+        // $troco = $valor - $valorrecebido;
+        // $troco=str_replace(",",".",$troco);
+
+        $troco = 0;
 
         if(($valor == "0") or ($forma == "")) {
             return 2; //Insira um Valor ou Forma de Pagamento em Branco!
         }else{
 
-            if($forma == "R$"){
+            if($forma == "R$" || $forma == "CD" || $forma == "BL"){
+
+                $percentual = 5.0 / 100.0; // 5%
+                $valor = $valor - ($percentual * $valor);
 
                 $sql = "INSERT INTO tbpedido_pagamento (idpedido, forma, valor, troco, tipo) VALUES ('$idpedido', '$forma', '$valor', '$troco', '$tipo') ";
         
@@ -1254,21 +1264,30 @@ class vision{
 
         $sql = "SELECT * FROM tbpedido_pagamento c,tbformas_pagamento b where c.idpedido = '$idpedido' and c.forma = b.idforma_pagamento; ";
         $sql = $this->conexao->query($sql);
-        $row = $sql->fetch_assoc();
+        
         $dados = array();
-            
 
-            $troco = number_format($row['troco'],2,",", ".");
-            $valor = number_format($row['valor'],2, ",", ".");
-            $dado = array();
-            $dado['forma'] = $row['forma'];
-            $dado['forma_descricao'] = $row['forma_descricao'];
-            $dado['troco'] =  $troco;
-            $dado['status'] = $row['status'];
-            $dado['valor'] = $valor;
-            $dado['idforma'] = $row['idforma'];
-            $dado['idpedido'] = $row['idpedido'];
-            $dados[] = $dado;
+        // $troco = number_format($row['troco'],2,",", ".");
+            
+        if (mysqli_num_rows($sql) > 0) {
+
+            while ($row = $sql->fetch_assoc()){
+                $valor = number_format($row['valor'], 2, ",", ".");
+                $dado = array();
+                $dado['forma'] = $row['forma'];
+                $dado['forma_descricao'] = $row['forma_descricao'];
+                // $dado['troco'] =  $troco;
+                $dado['status'] = $row['status'];
+                $dado['valor'] = $valor;
+                $dado['idforma'] = $row['idforma'];
+                $dado['idpedido'] = $row['idpedido'];
+                $dados[] = $dado;
+
+            }
+
+
+        }
+
 
         return $dados;
 
