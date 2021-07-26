@@ -625,7 +625,9 @@ if ($parametrotela == 'adicionarForma') {
     $forma = $_POST['forma'];
     $tipo = $_POST['tipo'];
     $valor = $_POST['valor'];
-    $valorrecebido = $_POST['valorrecebido'];
+    
+    if (empty($_POST['valorrecebido']) ? $valorrecebido = '' : $valorrecebido = $_POST['valorrecebido']);
+    // $valorrecebido = $_POST['valorrecebido'];
 
     echo $obj->adicionarForma($idpedido,$forma,$tipo,$valor,$valorrecebido);
 }
@@ -638,29 +640,58 @@ if ($parametrotela == 'listarFormasPagamento') {
     $result = $obj->listarFormasPagamento($idpedido);  
     
     // print_r($result);
-   
 
-    foreach ($result as $key => $row) {
-        $forma = $row['forma'];
-        $forma_descricao = $row['forma_descricao'];
-        $troco = $row['troco'];
-        $status = $row['status'];
-        $valor = $row['valor'];
-        $idforma = $row['idforma'];
-        $idpedido = $row['idpedido'];
-        if ($row['status'] == "F" ) { 
-        $btn = '' ;
-        }else{
-        $btn = "<td class='actions-hover actions-fade text-center'>
-                <span class='delete-row' data-toggle='modal' data-target='#deletarForma' id='btnDeletarForma' data-idpedido='".$idpedido."' data-idforma='".$idforma."'><i class='far fa-trash-alt'></i></a>
-        	    </td>";
-        } 
+    if (!empty($result)) {      
 
-        $arr[] = [$forma, $forma_descricao, $valor, $troco, $btn];
+        foreach ($result as $key => $row) {
+            $forma = $row['forma'];
+            $forma_descricao = $row['forma_descricao'];
+            if (!empty($row['troco'])) {
+                $troco = $row['troco'];
+            }else {
+                $troco = "";
+            }
+            $status = $row['status'];
+            $valor = $row['valor'];
+            $idforma = $row['idforma'];
+            $idpedido = $row['idpedido'];
+            if ($row['status'] == "F" ) { 
+            $btn = '' ;
+            }else{
+            $btn = "<td class='actions-hover actions-fade text-center'>
+                    <span class='delete-row' data-toggle='modal' data-target='#deletarForma' id='btnDeletarForma' data-idpedido='".$idpedido."' data-idforma='".$idforma."'><i class='far fa-trash-alt'></i></a>
+                    </td>";
+            }
+
+            $arr[] = [
+                'forma' => $forma,
+                'forma_descricao' => $forma_descricao,
+                'valor' => $valor,
+                'troco' => $troco,
+                'btn' => $btn
+            ];
+
+            // $arr[] = [$forma, $forma_descricao, $valor, $troco, $btn];
+           
+
+        }
+
+        echo json_encode($arr);
+        
+    }else{
+        $arr[] = [
+            'forma' => null,
+            'forma_descricao' => null,
+            'valor' => null,
+            'troco' => null,
+            'btn' => null
+        ];
+
+        echo json_encode($arr);
         
     }
-
-    echo json_encode($arr);
+  
+   
 }
 
 if ($parametrotela == "complete") {
